@@ -1,0 +1,517 @@
+[
+  {
+    "id": "bleu-de-chanel",
+    "name": "Bleu de Chanel",
+    "brand": "Chanel",
+    "gender": "Men",
+    "rating": 4.6,
+    "concentration": "Eau de Parfum",
+    "yearReleased": 2014,
+    "description": "An aromatic-woody fragrance that unites the invigorating freshness of citrus with the woody whisper of dry cedar. New Caledonian sandalwood lends it a warm and sensual trail.",
+    "description_en": "An aromatic-woody fragrance that unites the invigorating freshness of citrus with the woody whisper of dry cedar. New Caledonian sandalwood lends it a warm and sensual trail.",
+    "description_tr": "Sitrus notalarının canlandırıcı ferahlığını, kuru sedirin odunsu esintisiyle buluşturan aromatik ve odunsu bir koku. Yeni Kaledonya sandal ağacı, geride sıcak ve duyusal bir iz bırakıyor.",
+    "notes": {
+      "top": [
+        "Grapefruit",
+        "Lemon",
+        "Mint",
+        "Pink Pepper"
+      ],
+      "mid": [
+        "Ginger",
+        "Nutmeg",
+        "Jasmine"
+      ],
+      "base": [
+        "Incense",
+        "Vetiver",
+        "Cedar",
+        "Sandalwood",
+        "Patchouli",
+        "Labdanum"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 5,
+      "Woody": 40,
+      "Spicy": 15,
+      "Fresh": 35,
+      "Sweet": 5
+    },
+    "reviews": [
+      {
+        "id": "bdc-rev-1",
+        "user": "AuraEnthusiast",
+        "rating": 5,
+        "comment": "An absolute masterpiece of modern blue fragrances. The ginger and incense make it incredibly versatile and sophisticated.",
+        "date": "2026-05-12"
+      },
+      {
+        "id": "bdc-rev-2",
+        "user": "ScentScribe",
+        "rating": 4,
+        "comment": "Very safe, universally loved. The grapefruit opening is sharp and clean, but the dry down is where the warmth truly shines.",
+        "date": "2026-06-01"
+      }
+    ],
+    "sillage": "Moderate",
+    "longevity": "Long-Lasting",
+    "seasons": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ],
+    "occasions": [
+      "Office Safe",
+      "Casual Everyday"
+    ]
+  },
+  {
+    "id": "baccarat-rouge-540-extrait",
+    "name": "Baccarat Rouge 540",
+    "brand": "Maison Francis Kurkdjian",
+    "gender": "Unisex",
+    "rating": 4.7,
+    "concentration": "Extrait de Parfum",
+    "yearReleased": 2015,
+    "description": "Luminous and sophisticated, Baccarat Rouge 540 lays on the skin like an amber, floral, and woody breeze. A poetic alchemy where the aerial notes of jasmine and the radiance of saffron carry mineral facets of ambergris.",
+    "description_en": "Luminous and sophisticated, Baccarat Rouge 540 lays on the skin like an amber, floral, and woody breeze. A poetic alchemy where the aerial notes of jasmine and the radiance of saffron carry mineral facets of ambergris.",
+    "description_tr": "Işıltılı ve sofistike Baccarat Rouge 540, tene adeta amber, çiçeksi ve odunsu bir esinti gibi fısıldıyor. Yaseminin uçucu notaları ile safranın parlaklığının, gri kehribarın mineral yönlerini taşıdığı şiirsel bir simya.",
+    "notes": {
+      "top": [
+        "Saffron",
+        "Jasmine"
+      ],
+      "mid": [
+        "Amberwood",
+        "Ambergris"
+      ],
+      "base": [
+        "Fir Resin",
+        "Cedar"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 15,
+      "Woody": 25,
+      "Spicy": 5,
+      "Fresh": 5,
+      "Sweet": 50
+    },
+    "reviews": [
+      {
+        "id": "br540-rev-1",
+        "user": "NoseNotes",
+        "rating": 5,
+        "comment": "It smells like burnt sugar and luxury. It has an incredible sillage that lingers in the air long after you have left.",
+        "date": "2026-04-20"
+      },
+      {
+        "id": "br540-rev-2",
+        "user": "VelvetVials",
+        "rating": 4.5,
+        "comment": "Incredibly airy yet present. Sometimes I get anosmic to it, but everyone around me comments on how heavenly it smells.",
+        "date": "2026-06-15"
+      }
+    ],
+    "sillage": "Heavy",
+    "longevity": "Eternal",
+    "seasons": [
+      "Autumn",
+      "Winter",
+      "Spring"
+    ],
+    "occasions": [
+      "Gala Formal",
+      "Date Night"
+    ]
+  },
+  {
+    "id": "aventus",
+    "name": "Aventus",
+    "brand": "Creed",
+    "gender": "Men",
+    "rating": 4.5,
+    "concentration": "Eau de Parfum",
+    "yearReleased": 2010,
+    "description": "The exceptional Aventus was inspired by the dramatic life of a historic emperor, celebrating strength, power, and success. Introduced in 2010, this scent has grown to become the most successful fragrance in the history of the brand.",
+    "description_en": "The exceptional Aventus was inspired by the dramatic life of a historic emperor, celebrating strength, power, and success. Introduced in 2010, this scent has grown to become the most successful fragrance in the history of the brand.",
+    "description_tr": "Sıra dışı Aventus, gücü, iktidarı ve başarıyı kutlayan tarihi bir imparatorun dramatik yaşamından ilham alıyor. 2010 yılında sunulan bu koku, markanın tarihindeki en başarılı parfüm haline gelmiştir.",
+    "notes": {
+      "top": [
+        "Pineapple",
+        "Bergamot",
+        "Blackcurrant",
+        "Apple"
+      ],
+      "mid": [
+        "Birch",
+        "Patchouli",
+        "Moroccan Jasmine",
+        "Rose"
+      ],
+      "base": [
+        "Musk",
+        "Oakmoss",
+        "Ambergris",
+        "Vanilla"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 5,
+      "Woody": 30,
+      "Spicy": 5,
+      "Fresh": 45,
+      "Sweet": 15
+    },
+    "reviews": [
+      {
+        "id": "ave-rev-1",
+        "user": "KingCreed",
+        "rating": 5,
+        "comment": "The pineapple opening combined with the smoky birch dry down is legendary. Still the king of masculine fragrances.",
+        "date": "2026-03-10"
+      },
+      {
+        "id": "ave-rev-2",
+        "user": "DecantCollector",
+        "rating": 4,
+        "comment": "Batch variations exist, but when you get a good smoky-fruity balance, nothing else compares.",
+        "date": "2026-05-28"
+      }
+    ],
+    "sillage": "Heavy",
+    "longevity": "Long-Lasting",
+    "seasons": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ],
+    "occasions": [
+      "Gala Formal",
+      "Office Safe"
+    ]
+  },
+  {
+    "id": "black-opium",
+    "name": "Black Opium",
+    "brand": "Yves Saint Laurent",
+    "gender": "Women",
+    "rating": 4.6,
+    "concentration": "Eau de Parfum",
+    "yearReleased": 2014,
+    "description": "A highly addictive feminine fragrance from Yves Saint Laurent. Fascinating and seductively intoxicating, the opening notes of adrenaline-rich coffee and the sweet sensuality of vanilla recline into the softness of white flowers.",
+    "description_en": "A highly addictive feminine fragrance from Yves Saint Laurent. Fascinating and seductively intoxicating, the opening notes of adrenaline-rich coffee and the sweet sensuality of vanilla recline into the softness of white flowers.",
+    "description_tr": "Yves Saint Laurent'dan bağımlılık yaratan kadınsı bir koku. Büyüleyici ve baştan çıkarıcı derecede sarhoş edici; adrenalin yüklü kahvenin açılış notaları ile vanilyanın tatlı şehveti, beyaz çiçeklerin yumuşaklığına teslim oluyor.",
+    "notes": {
+      "top": [
+        "Pear",
+        "Pink Pepper",
+        "Orange Blossom"
+      ],
+      "mid": [
+        "Coffee",
+        "Jasmine",
+        "Bitter Almond",
+        "Licorice"
+      ],
+      "base": [
+        "Vanilla",
+        "Patchouli",
+        "Cashmere Wood",
+        "Cedar"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 8,
+      "Woody": 15,
+      "Spicy": 30,
+      "Fresh": 2,
+      "Sweet": 45
+    },
+    "reviews": [
+      {
+        "id": "bo-rev-1",
+        "user": "GourmandGirl",
+        "rating": 5,
+        "comment": "The perfect blend of coffee and vanilla. It feels dark, mysterious, and warm. My go-to night out fragrance.",
+        "date": "2026-02-14"
+      },
+      {
+        "id": "bo-rev-2",
+        "user": "MidnightMist",
+        "rating": 4,
+        "comment": "Sweet, warm, and highly seductive. The coffee note could be stronger, but the vanilla-pear combination is gorgeous.",
+        "date": "2026-06-10"
+      }
+    ],
+    "sillage": "Moderate",
+    "longevity": "Long-Lasting",
+    "seasons": [
+      "Autumn",
+      "Winter"
+    ],
+    "occasions": [
+      "Date Night",
+      "Gala Formal"
+    ]
+  },
+  {
+    "id": "shalimar",
+    "name": "Shalimar",
+    "brand": "Guerlain",
+    "gender": "Women",
+    "rating": 4.4,
+    "concentration": "Eau de Parfum",
+    "yearReleased": 1925,
+    "description": "Inspired by the passionate love story between an emperor and an Indian princess, Shalimar, which means 'temple of love' in Sanskrit, symbolizes the promise of eternal love forever. It is a fragrance of desire.",
+    "description_en": "Inspired by the passionate love story between an emperor and an Indian princess, Shalimar, which means 'temple of love' in Sanskrit, symbolizes the promise of eternal love forever. It is a fragrance of desire.",
+    "description_tr": "Bir imparator ile Hint prensesi arasındaki tutkulu aşk hikayesinden ilham alan ve Sanskritçe'de 'aşk tapınağı' anlamına gelen Shalimar, sonsuz aşk vaadini simgeliyor. Bu koku arzunun vücut bulmuş halidir.",
+    "notes": {
+      "top": [
+        "Citruses",
+        "Bergamot",
+        "Lemon",
+        "Cedar",
+        "Mandarin Orange"
+      ],
+      "mid": [
+        "Iris",
+        "Patchouli",
+        "Vetiver",
+        "Jasmine",
+        "Rose"
+      ],
+      "base": [
+        "Incense",
+        "Vanilla",
+        "Leather",
+        "Opoponax",
+        "Civet",
+        "Sandalwood",
+        "Tonka Bean",
+        "Musk"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 10,
+      "Woody": 20,
+      "Spicy": 40,
+      "Fresh": 5,
+      "Sweet": 25
+    },
+    "reviews": [
+      {
+        "id": "sha-rev-1",
+        "user": "ClassicNose",
+        "rating": 5,
+        "comment": "The mother of all oriental fragrances. Powdery iris, smoky incense, and rich, dark vanilla. Pure vintage royalty.",
+        "date": "2026-01-05"
+      },
+      {
+        "id": "sha-rev-2",
+        "user": "HistoryInABottle",
+        "rating": 4.5,
+        "comment": "A complex, powdery masterpiece. It starts off bright and citrusy but transforms into a beautiful leather-vanilla blanket.",
+        "date": "2026-04-18"
+      }
+    ],
+    "sillage": "Heavy",
+    "longevity": "Eternal",
+    "seasons": [
+      "Autumn",
+      "Winter"
+    ],
+    "occasions": [
+      "Gala Formal",
+      "Date Night"
+    ]
+  },
+  {
+    "id": "miss-dior-blooming-bouquet",
+    "name": "Miss Dior Blooming Bouquet",
+    "brand": "Dior",
+    "gender": "Women",
+    "rating": 4.5,
+    "concentration": "Eau de Toilette",
+    "yearReleased": 2014,
+    "description": "Miss Dior Blooming Bouquet is a fresh and sparkling composition fashioned like a dress embroidered with flowers. The olfactory bouquet pays homage to Christian Dior's legendary love of flowers.",
+    "description_en": "Miss Dior Blooming Bouquet is a fresh and sparkling composition fashioned like a dress embroidered with flowers. The olfactory bouquet pays homage to Christian Dior's legendary love of flowers.",
+    "description_tr": "Miss Dior Blooming Bouquet, çiçeklerle süslenmiş bir elbise gibi tasarlanmış, taze ve ışıltılı bir kompozisyondur. Bu koku buketi, Christian Dior'un efsanevi çiçek sevgisine bir saygı duruşu niteliğindedir.",
+    "notes": {
+      "top": [
+        "Sicilian Mandarin"
+      ],
+      "mid": [
+        "Pink Peony",
+        "Damask Rose",
+        "Apricot",
+        "Peach"
+      ],
+      "base": [
+        "White Musk"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 70,
+      "Woody": 2,
+      "Spicy": 0,
+      "Fresh": 20,
+      "Sweet": 8
+    },
+    "reviews": [
+      {
+        "id": "mdbb-rev-1",
+        "user": "FloralFairway",
+        "rating": 5,
+        "comment": "The most beautiful, delicate floral scent ever created. It smells like a fresh spring morning in a flower market.",
+        "date": "2026-05-02"
+      },
+      {
+        "id": "mdbb-rev-2",
+        "user": "PetalSoft",
+        "rating": 4,
+        "comment": "Extremely elegant and airy. Sillage is light, but it is the perfect office or warm-weather fragrance.",
+        "date": "2026-06-20"
+      }
+    ],
+    "sillage": "Intimate",
+    "longevity": "Ephemeral",
+    "seasons": [
+      "Spring",
+      "Summer"
+    ],
+    "occasions": [
+      "Casual Everyday",
+      "Office Safe"
+    ]
+  },
+  {
+    "id": "black-xs-men",
+    "name": "Black XS",
+    "brand": "Paco Rabanne",
+    "gender": "Men",
+    "rating": 4.3,
+    "concentration": "Eau de Toilette",
+    "yearReleased": 2005,
+    "description": "Black XS is a dark, sweet, and woody fragrance with an outlaw attitude. A fragrance that combines fresh lemon and kalamanzi notes with sweet praline, spiced black cardamom, and deep, dark patchouli.",
+    "description_en": "Black XS is a dark, sweet, and woody fragrance with an outlaw attitude. A fragrance that combines fresh lemon and kalamanzi notes with sweet praline, spiced black cardamom, and deep, dark patchouli.",
+    "description_tr": "Black XS, asi bir tavra sahip, karanlık, tatlı ve odunsu bir kokudur. Taze limon ve kalamanzi notalarını; tatlı pralin, baharatlı siyah kakule ve derin, karanlık paçuli ile harmanlayan bir kompozisyon.",
+    "notes": {
+      "top": [
+        "Lemon",
+        "Sage",
+        "Tagetes",
+        "Kalamanzi"
+      ],
+      "mid": [
+        "Praline",
+        "Cinnamon",
+        "Black Cardamom",
+        "Tolu Balsam"
+      ],
+      "base": [
+        "Brazilian Rosewood",
+        "Amber",
+        "Patchouli",
+        "Ebony Wood"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 5,
+      "Woody": 30,
+      "Spicy": 20,
+      "Fresh": 5,
+      "Sweet": 40
+    },
+    "reviews": [
+      {
+        "id": "bxs-rev-1",
+        "user": "RockNose",
+        "rating": 4.5,
+        "comment": "Love the sweet strawberry-like vibe created by the lemon and praline. It's got a very unique, edgy vibe.",
+        "date": "2026-04-11"
+      },
+      {
+        "id": "bxs-rev-2",
+        "user": "ShadowScent",
+        "rating": 4,
+        "comment": "Dark, sweet, and rebellious. It's got a heavy praline sweetness balanced by woody base notes. Great for cooler weather.",
+        "date": "2026-05-19"
+      }
+    ],
+    "sillage": "Moderate",
+    "longevity": "Moderate",
+    "seasons": [
+      "Autumn",
+      "Winter",
+      "Spring"
+    ],
+    "occasions": [
+      "Date Night",
+      "Casual Everyday"
+    ]
+  },
+  {
+    "id": "ganymede",
+    "name": "Ganymede",
+    "brand": "Marc-Antoine Barrois",
+    "gender": "Unisex",
+    "rating": 4.8,
+    "concentration": "Eau de Parfum",
+    "yearReleased": 2019,
+    "description": "A new, elegant, and unexpected mineral-leather fragrance. Ganymede plays on the contrast of brightness and depth, combining suede leather notes with violet, mandarin orange, and mineral-salty immortelle.",
+    "description_en": "A new, elegant, and unexpected mineral-leather fragrance. Ganymede plays on the contrast of brightness and depth, combining suede leather notes with violet, mandarin orange, and mineral-salty immortelle.",
+    "description_tr": "Yeni, zarif ve beklenmedik bir mineral-deri kokusu. Aydınlık ve derinlik arasındaki tezatla oynayan Ganymede; süet deri notalarını menekşe, mandalina ve mineral-tuzlu ölmezçiçek ile birleştiriyor.",
+    "notes": {
+      "top": [
+        "Mandarin Orange",
+        "Saffron"
+      ],
+      "mid": [
+        "Violet",
+        "Osmanthus",
+        "Mineral Notes"
+      ],
+      "base": [
+        "Akigalawood",
+        "Immortelle",
+        "Suede"
+      ]
+    },
+    "olfactoryProfile": {
+      "Floral": 5,
+      "Woody": 45,
+      "Spicy": 20,
+      "Fresh": 25,
+      "Sweet": 5
+    },
+    "reviews": [
+      {
+        "id": "gan-rev-1",
+        "user": "NeoClassic",
+        "rating": 5,
+        "comment": "This smells like a luxury spacecraft or a clean, metallic leather handbag. Mind-blowingly unique and futuristic.",
+        "date": "2026-03-24"
+      },
+      {
+        "id": "gan-rev-2",
+        "user": "AvantGarde",
+        "rating": 5,
+        "comment": "An absolute masterpiece by Quentin Bisch. Mineral, salty, leathery, and incredibly clean all at once. Lasts forever.",
+        "date": "2026-06-29"
+      }
+    ],
+    "sillage": "Nuclear",
+    "longevity": "Eternal",
+    "seasons": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ],
+    "occasions": [
+      "Gala Formal",
+      "Office Safe"
+    ]
+  }
+]

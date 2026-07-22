@@ -1,0 +1,175 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ScentSphere – Prisma Schema
+// Database: MySQL 8.0  |  ORM: Prisma 7
+// Connection URL is configured in prisma.config.ts (not here).
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Prisma 7 generator: emits the typed client into src/generated/prisma
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// MySQL 8 datasource – URL is injected by prisma.config.ts via dotenv
+datasource db {
+  provider = "mysql"
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum Concentration {
+  EAU_DE_PARFUM   @map("Eau de Parfum")
+  EXTRAIT         @map("Extrait de Parfum")
+  EAU_DE_TOILETTE @map("Eau de Toilette")
+}
+
+enum Gender {
+  Men
+  Women
+  Unisex
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+/// Pyramid layer of a perfume note
+enum NoteLayer {
+  bas   // Baş Notaları (Top Notes)
+  kalp  // Kalp Notaları (Heart Notes)
+  dip   // Dip Notaları (Base Notes)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Models
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Registered application users
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique @db.VarChar(60)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @db.VarChar(255)
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+
+  // Relations
+  wardrobe UserWardrobe[]
+  favorites UserFavorite[]
+  reviews  Review[]
+
+  @@map("users")
+}
+
+/// Master perfume catalogue entry
+model Perfume {
+  id                String        @id @db.VarChar(100) // e.g. "bleu-de-chanel"
+  name              String        @db.VarChar(200)
+  brand             String        @db.VarChar(150)
+  concentration     Concentration
+  gender            Gender
+  mainDescriptionTr String        @db.Text
+  mainDescriptionEn String        @db.Text
+  /// Comma-separated English season values, e.g. "Spring, Summer, Autumn"
+  seasons           String        @db.VarChar(255)
+  /// Comma-separated English occasion values, e.g. "Casual Everyday, Office Safe"
+  occasions         String        @db.VarChar(255)
+
+  // Relations
+  notes            PerfumeNote[]
+  olfactoryProfile OlfactoryProfile?
+  wardrobe         UserWardrobe[]
+  favorites        UserFavorite[]
+  reviews          Review[]
+
+  @@index([brand])
+  @@index([gender])
+  @@map("perfumes")
+}
+
+/// Individual note belonging to a perfume (top / heart / base layer)
+model PerfumeNote {
+  id          Int       @id @default(autoincrement())
+  perfumeId   String    @db.VarChar(100)
+  noteNameTr  String    @db.VarChar(150)
+  noteNameEn  String    @db.VarChar(150)
+  layer       NoteLayer
+
+  // Foreign key
+  perfume Perfume @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+
+  @@index([perfumeId])
+  @@index([layer])
+  @@map("perfume_notes")
+}
+
+/// Five-axis olfactory profile (one-to-one with Perfume)
+model OlfactoryProfile {
+  perfumeId String @id @db.VarChar(100)
+  floral    Int    @default(0)
+  woody     Int    @default(0)
+  spicy     Int    @default(0)
+  fresh     Int    @default(0)
+  sweet     Int    @default(0)
+
+  // Foreign key (1-to-1 owned side)
+  perfume Perfume @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+
+  @@map("olfactory_profiles")
+}
+
+/// Junction table: which perfumes a user has in their wardrobe
+model UserWardrobe {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  perfumeId String   @db.VarChar(100)
+  addedAt   DateTime @default(now())
+
+  // Foreign keys
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  perfume Perfume @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, perfumeId]) // A user cannot add the same perfume twice
+  @@index([userId])
+  @@index([perfumeId])
+  @@map("user_wardrobes")
+}
+
+/// Junction table: which perfumes a user has in their favorites
+model UserFavorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  perfumeId String   @db.VarChar(100)
+  addedAt   DateTime @default(now())
+
+  // Foreign keys
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  perfume Perfume @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, perfumeId]) // A user cannot favorite the same perfume twice
+  @@index([userId])
+  @@index([perfumeId])
+  @@map("user_favorites")
+}
+
+/// User review for a perfume
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  perfumeId String   @db.VarChar(100)
+  rating    Int      // Expected range: 1–5
+  comment   String   @db.Text
+  createdAt DateTime @default(now())
+
+  // Foreign keys
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  perfume Perfume @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([perfumeId])
+  @@index([rating])
+  @@map("reviews")
+}
