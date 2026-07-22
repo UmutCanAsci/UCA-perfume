@@ -158,31 +158,6 @@ export default function ProfilePage() {
 
           {/* Owner vs. Visitor Toggle Controls */}
           <div className="mt-8 pt-6 border-t border-[#c5a880]/10 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
-            <div className="flex items-center gap-2.5">
-              <span className="text-[10px] tracking-widest text-[#f5f0e6]/50 uppercase font-semibold">{dict.profile.simulation}</span>
-              <div className="flex bg-black/60 rounded-full p-0.5 border border-[#c5a880]/20">
-                <button
-                  onClick={() => setIsVisitorMode(false)}
-                  className={`px-4 py-1 rounded-full text-[9px] tracking-widest uppercase transition-all duration-300 cursor-pointer ${
-                    !isVisitorMode
-                      ? "bg-[#c5a880] text-black font-semibold shadow-md"
-                      : "text-[#f5f0e6]/60 hover:text-white"
-                  }`}
-                >
-                  {dict.profile.viewOwner}
-                </button>
-                <button
-                  onClick={() => setIsVisitorMode(true)}
-                  className={`px-4 py-1 rounded-full text-[9px] tracking-widest uppercase transition-all duration-300 cursor-pointer ${
-                    isVisitorMode
-                      ? "bg-[#c5a880] text-black font-semibold shadow-md"
-                      : "text-[#f5f0e6]/60 hover:text-white"
-                  }`}
-                >
-                  {dict.profile.viewVisitor}
-                </button>
-              </div>
-            </div>
 
             <div className="flex items-center gap-3">
               {activeUser?.role === "admin" && (
