@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, Fragment } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, Variants, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
@@ -97,6 +98,7 @@ export default function Home() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const router = useRouter();
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -994,7 +996,15 @@ export default function Home() {
                 
                 <button 
                   type="button"
-                  onClick={() => setSelectedPerfume(perfume)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Mobile (<768px): bypass modal, go straight to the detail page
+                    if (typeof window !== "undefined" && window.innerWidth < 768) {
+                      router.push(`/perfume/${perfume.id}`);
+                    } else {
+                      setSelectedPerfume(perfume);
+                    }
+                  }}
                   className="text-[10px] tracking-[0.25em] uppercase font-semibold text-[#c5a880] group-hover:text-[#f5f0e6] transition-colors duration-300 flex items-center gap-1.5 cursor-pointer"
                 >
                   {dict.cards.viewDetails} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-300" />
