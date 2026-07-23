@@ -748,7 +748,9 @@ export default function ConsultantPage() {
                         </div>
 
                         <p className="text-xs text-[#f5f0e6]/65 leading-relaxed font-light">
-                          {language === "tr" ? topMatch.perfume.description_tr : topMatch.perfume.description_en}
+                          {language === 'tr'
+                            ? (topMatch.perfume.description_tr || topMatch.perfume.description_en || topMatch.perfume.description)
+                            : (topMatch.perfume.description_en || topMatch.perfume.description_tr || topMatch.perfume.description)}
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-white/5 items-center">
@@ -793,8 +795,8 @@ export default function ConsultantPage() {
                             </span>
                             <span className="text-white font-medium">
                               {(language === 'tr'
-                                ? ((topMatch.perfume as any).notes_tr?.top ?? topMatch.perfume.notes.top)
-                                : ((topMatch.perfume as any).notes_en?.top ?? topMatch.perfume.notes.top)
+                                ? (((topMatch.perfume as any).notes_tr?.top?.length ? (topMatch.perfume as any).notes_tr.top : null) ?? topMatch.perfume.notes.top)
+                                : (((topMatch.perfume as any).notes_en?.top?.length ? (topMatch.perfume as any).notes_en.top : null) ?? topMatch.perfume.notes.top)
                               ).join(", ")}
                             </span>
                           </div>
@@ -804,8 +806,8 @@ export default function ConsultantPage() {
                             </span>
                             <span className="text-white font-medium">
                               {(language === 'tr'
-                                ? ((topMatch.perfume as any).notes_tr?.mid ?? topMatch.perfume.notes.mid)
-                                : ((topMatch.perfume as any).notes_en?.mid ?? topMatch.perfume.notes.mid)
+                                ? (((topMatch.perfume as any).notes_tr?.mid?.length ? (topMatch.perfume as any).notes_tr.mid : null) ?? topMatch.perfume.notes.mid)
+                                : (((topMatch.perfume as any).notes_en?.mid?.length ? (topMatch.perfume as any).notes_en.mid : null) ?? topMatch.perfume.notes.mid)
                               ).join(", ")}
                             </span>
                           </div>
@@ -815,8 +817,8 @@ export default function ConsultantPage() {
                             </span>
                             <span className="text-white font-medium">
                               {(language === 'tr'
-                                ? ((topMatch.perfume as any).notes_tr?.base ?? topMatch.perfume.notes.base)
-                                : ((topMatch.perfume as any).notes_en?.base ?? topMatch.perfume.notes.base)
+                                ? (((topMatch.perfume as any).notes_tr?.base?.length ? (topMatch.perfume as any).notes_tr.base : null) ?? topMatch.perfume.notes.base)
+                                : (((topMatch.perfume as any).notes_en?.base?.length ? (topMatch.perfume as any).notes_en.base : null) ?? topMatch.perfume.notes.base)
                               ).join(", ")}
                             </span>
                           </div>
@@ -868,7 +870,9 @@ export default function ConsultantPage() {
                             </div>
                           </div>
                           <p className="text-xs text-[#f5f0e6]/50 leading-relaxed font-light line-clamp-3">
-                            {language === "tr" ? res.perfume.description_tr : res.perfume.description_en}
+                            {language === 'tr'
+                              ? (res.perfume.description_tr || res.perfume.description_en || res.perfume.description)
+                              : (res.perfume.description_en || res.perfume.description_tr || res.perfume.description)}
                           </p>
                         </div>
 
@@ -880,8 +884,8 @@ export default function ConsultantPage() {
                             </span>
                             <span className="text-[#f5f0e6]/70 truncate max-w-[200px]">
                               {(language === 'tr'
-                                ? ((res.perfume as any).notes_tr?.top ?? res.perfume.notes.top)
-                                : ((res.perfume as any).notes_en?.top ?? res.perfume.notes.top)
+                                ? (((res.perfume as any).notes_tr?.top?.length ? (res.perfume as any).notes_tr.top : null) ?? res.perfume.notes.top)
+                                : (((res.perfume as any).notes_en?.top?.length ? (res.perfume as any).notes_en.top : null) ?? res.perfume.notes.top)
                               ).join(", ")}
                             </span>
                           </div>
@@ -891,8 +895,8 @@ export default function ConsultantPage() {
                             </span>
                             <span className="text-[#f5f0e6]/70 truncate max-w-[200px]">
                               {(language === 'tr'
-                                ? ((res.perfume as any).notes_tr?.mid ?? res.perfume.notes.mid)
-                                : ((res.perfume as any).notes_en?.mid ?? res.perfume.notes.mid)
+                                ? (((res.perfume as any).notes_tr?.mid?.length ? (res.perfume as any).notes_tr.mid : null) ?? res.perfume.notes.mid)
+                                : (((res.perfume as any).notes_en?.mid?.length ? (res.perfume as any).notes_en.mid : null) ?? res.perfume.notes.mid)
                               ).join(", ")}
                             </span>
                           </div>
@@ -902,8 +906,8 @@ export default function ConsultantPage() {
                             </span>
                             <span className="text-[#f5f0e6]/70 truncate max-w-[200px]">
                               {(language === 'tr'
-                                ? ((res.perfume as any).notes_tr?.base ?? res.perfume.notes.base)
-                                : ((res.perfume as any).notes_en?.base ?? res.perfume.notes.base)
+                                ? (((res.perfume as any).notes_tr?.base?.length ? (res.perfume as any).notes_tr.base : null) ?? res.perfume.notes.base)
+                                : (((res.perfume as any).notes_en?.base?.length ? (res.perfume as any).notes_en.base : null) ?? res.perfume.notes.base)
                               ).join(", ")}
                             </span>
                           </div>

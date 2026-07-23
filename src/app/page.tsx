@@ -266,7 +266,7 @@ export default function Home() {
                    bg-black/85 backdrop-blur-2xl
                    border-r border-[#c5a880]/30
                    shadow-[10px_0_40px_rgba(0,0,0,0.8)]
-                   flex flex-col"
+                   hidden md:flex md:flex-col"
       >
         {/* ── Inner panel — always 288px wide, clipped by parent ── */}
         <div className="w-72 flex flex-col h-full">
