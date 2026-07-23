@@ -232,7 +232,7 @@ export default function ConsultantPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0F0F10] text-[#f5f0e6] font-sans selection:bg-[#c5a880] selection:text-black flex flex-col justify-between relative overflow-hidden">
+    <div className="min-h-screen bg-[#0F0F10] text-[#f5f0e6] font-sans selection:bg-[#c5a880] selection:text-black flex flex-col justify-between relative overflow-hidden max-w-full w-full">
       {/* Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden w-full h-full">
         <video
@@ -248,7 +248,7 @@ export default function ConsultantPage() {
       </div>
       {/* Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-[#c5a880]/10">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
           <Link href="/" className="flex items-center gap-2 group text-xs tracking-[0.2em] uppercase font-light text-[#f5f0e6]/70 hover:text-[#c5a880] transition-colors duration-300">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             {t("backToLibrary")}
@@ -274,9 +274,9 @@ export default function ConsultantPage() {
       </header>
 
       {/* Main Wizard Content Area */}
-      <main className="max-w-6xl mx-auto px-6 pt-36 pb-20 w-full flex-1 flex flex-col justify-center relative z-10">
+      <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 pt-28 sm:pt-36 pb-20 flex-1 flex flex-col justify-center relative z-10 overflow-x-hidden">
         {step < 4 && (
-          <div className="w-full max-w-2xl mx-auto mb-10">
+          <div className="w-full max-w-2xl mx-auto mb-10 px-1">
             {/* Step progress bar */}
             <div className="flex justify-between items-center text-[10px] tracking-[0.25em] text-[#c5a880] uppercase font-bold mb-3">
               <span>{t("olfactoryDiagnosticsLabel")}</span>
@@ -303,7 +303,7 @@ export default function ConsultantPage() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="max-w-4xl mx-auto"
+                className="w-full max-w-4xl mx-auto"
               >
                 <div className="text-center mb-8">
                   <span className="text-[10px] tracking-[0.3em] uppercase text-[#c5a880] mb-2 block">{t("stepOf")} 1</span>
@@ -400,7 +400,7 @@ export default function ConsultantPage() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="max-w-4xl mx-auto"
+                className="w-full max-w-4xl mx-auto"
               >
                 <div className="text-center mb-8">
                   <span className="text-[10px] tracking-[0.3em] uppercase text-[#c5a880] mb-2 block">{t("stepOf")} 2</span>
@@ -497,7 +497,7 @@ export default function ConsultantPage() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="max-w-3xl mx-auto"
+                className="w-full max-w-3xl mx-auto"
               >
                 <div className="text-center mb-8">
                   <span className="text-[10px] tracking-[0.3em] uppercase text-[#c5a880] mb-2 block">{t("stepOf")} 3</span>
@@ -657,7 +657,7 @@ export default function ConsultantPage() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="max-w-5xl mx-auto w-full relative"
+                className="w-full max-w-5xl mx-auto relative"
               >
                 {/* Floating Gold Particles Accent */}
                 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-[600px] w-full">

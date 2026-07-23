@@ -234,7 +234,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#f5f0e6] font-sans selection:bg-[#c5a880] selection:text-black flex">
+    <div className="min-h-screen bg-[#050505] text-[#f5f0e6] font-sans selection:bg-[#c5a880] selection:text-black flex overflow-x-hidden max-w-full">
 
       {/* ═══════════════════════════════════════════════════════
           COLLAPSIBLE LUXURY SIDEBAR
@@ -429,7 +429,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════
           MAIN CONTENT — full viewport width (sidebar overlays)
       ═══════════════════════════════════════════════════════ */}
-      <div className="flex-1 min-w-0 w-full">
+      <div className="flex-1 min-w-0 w-full overflow-x-hidden">
 
       {/* Cinematic Hero Section with Hardware-Accelerated Video Loop */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden w-full bg-[#0F0F10]">

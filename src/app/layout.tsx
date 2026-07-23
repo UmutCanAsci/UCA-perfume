@@ -32,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cinzel.variable} ${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col antialiased bg-background text-foreground">
+    <html lang="en" className={`${cinzel.variable} ${inter.variable} h-full overflow-x-hidden`}>
+      <body className="min-h-full flex flex-col antialiased bg-background text-foreground overflow-x-hidden w-full max-w-full">
         <ScentSphereProvider>
           {children}
         </ScentSphereProvider>
