@@ -47,7 +47,7 @@ const sillages = ["Skin Scent (Subtle & Close)", "Moderate Signature (Noticeable
 const dressCodes = ["Formal (Suit & Tie)", "Edgy (Leather Jacket)", "Casual (Relaxed)"];
 
 export default function ConsultantPage() {
-  const { currentUser, addToWardrobe, language, toggleLanguage, t } = useScentSphere();
+  const { currentUser, addToWardrobe, language, toggleLanguage, t, perfumes } = useScentSphere();
   
   // State for wizard steps
   const [step, setStep] = useState(1);
@@ -67,6 +67,42 @@ export default function ConsultantPage() {
   const [preferredNotesText, setPreferredNotesText] = useState("");
 
   const [results, setResults] = useState<RecommendationResult[]>([]);
+
+  // ── Locale-aware description resolver ─────────────────────────────────────
+  // The live DB may have mainDescriptionEn = null for some perfumes.
+  // Fall back to the static perfumesData.json seed (always bilingual) so EN
+  // users never see Turkish text regardless of DB completeness.
+  const resolveDesc = (perfume: Perfume & Record<string, any>): string => {
+    const staticSeed = perfumes.find(p => p.id === perfume.id);
+    if (language === 'tr') {
+      return perfume.description_tr
+        || staticSeed?.description_tr
+        || perfume.description_en
+        || staticSeed?.description_en
+        || perfume.description
+        || '';
+    }
+    return perfume.description_en
+      || staticSeed?.description_en
+      || perfume.description_tr
+      || staticSeed?.description_tr
+      || perfume.description
+      || '';
+  };
+
+  // ── Locale-aware notes resolver ────────────────────────────────────────────
+  // notes_en / notes_tr come from the API; notes (base field) is always EN.
+  // Guard against empty arrays (truthy but useless) and missing properties.
+  const resolveNotes = (
+    perfume: Perfume & Record<string, any>,
+    layer: 'top' | 'mid' | 'base'
+  ): string[] => {
+    const apiKey = language === 'tr' ? 'notes_tr' : 'notes_en';
+    const apiArr: string[] | undefined = perfume[apiKey]?.[layer];
+    if (Array.isArray(apiArr) && apiArr.length > 0) return apiArr;
+    // Fall back to the base notes field (always English from the API)
+    return perfume.notes[layer] ?? [];
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -748,9 +784,7 @@ export default function ConsultantPage() {
                         </div>
 
                         <p className="text-xs text-[#f5f0e6]/65 leading-relaxed font-light">
-                          {language === 'tr'
-                            ? (topMatch.perfume.description_tr || topMatch.perfume.description_en || topMatch.perfume.description)
-                            : (topMatch.perfume.description_en || topMatch.perfume.description_tr || topMatch.perfume.description)}
+                          {resolveDesc(topMatch.perfume as any)}
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-white/5 items-center">
@@ -794,10 +828,7 @@ export default function ConsultantPage() {
                               {language === 'tr' ? "Üst Notalar (Açılış)" : "Top Notes"}
                             </span>
                             <span className="text-white font-medium">
-                              {(language === 'tr'
-                                ? (((topMatch.perfume as any).notes_tr?.top?.length ? (topMatch.perfume as any).notes_tr.top : null) ?? topMatch.perfume.notes.top)
-                                : (((topMatch.perfume as any).notes_en?.top?.length ? (topMatch.perfume as any).notes_en.top : null) ?? topMatch.perfume.notes.top)
-                              ).join(", ")}
+                              {resolveNotes(topMatch.perfume as any, 'top').join(", ")}
                             </span>
                           </div>
                           <div>
@@ -805,10 +836,7 @@ export default function ConsultantPage() {
                               {language === 'tr' ? "Orta Notalar (Kalp)" : "Heart Notes"}
                             </span>
                             <span className="text-white font-medium">
-                              {(language === 'tr'
-                                ? (((topMatch.perfume as any).notes_tr?.mid?.length ? (topMatch.perfume as any).notes_tr.mid : null) ?? topMatch.perfume.notes.mid)
-                                : (((topMatch.perfume as any).notes_en?.mid?.length ? (topMatch.perfume as any).notes_en.mid : null) ?? topMatch.perfume.notes.mid)
-                              ).join(", ")}
+                              {resolveNotes(topMatch.perfume as any, 'mid').join(", ")}
                             </span>
                           </div>
                           <div>
@@ -816,10 +844,7 @@ export default function ConsultantPage() {
                               {language === 'tr' ? "Alt Notalar (Dip)" : "Base Notes"}
                             </span>
                             <span className="text-white font-medium">
-                              {(language === 'tr'
-                                ? (((topMatch.perfume as any).notes_tr?.base?.length ? (topMatch.perfume as any).notes_tr.base : null) ?? topMatch.perfume.notes.base)
-                                : (((topMatch.perfume as any).notes_en?.base?.length ? (topMatch.perfume as any).notes_en.base : null) ?? topMatch.perfume.notes.base)
-                              ).join(", ")}
+                              {resolveNotes(topMatch.perfume as any, 'base').join(", ")}
                             </span>
                           </div>
                         </div>
@@ -870,9 +895,7 @@ export default function ConsultantPage() {
                             </div>
                           </div>
                           <p className="text-xs text-[#f5f0e6]/50 leading-relaxed font-light line-clamp-3">
-                            {language === 'tr'
-                              ? (res.perfume.description_tr || res.perfume.description_en || res.perfume.description)
-                              : (res.perfume.description_en || res.perfume.description_tr || res.perfume.description)}
+                            {resolveDesc(res.perfume as any)}
                           </p>
                         </div>
 
@@ -883,10 +906,7 @@ export default function ConsultantPage() {
                               {language === 'tr' ? "Üst Notalar (Açılış):" : "Top:"}
                             </span>
                             <span className="text-[#f5f0e6]/70 truncate max-w-[200px]">
-                              {(language === 'tr'
-                                ? (((res.perfume as any).notes_tr?.top?.length ? (res.perfume as any).notes_tr.top : null) ?? res.perfume.notes.top)
-                                : (((res.perfume as any).notes_en?.top?.length ? (res.perfume as any).notes_en.top : null) ?? res.perfume.notes.top)
-                              ).join(", ")}
+                              {resolveNotes(res.perfume as any, 'top').join(", ")}
                             </span>
                           </div>
                           <div className="flex justify-between">
@@ -894,10 +914,7 @@ export default function ConsultantPage() {
                               {language === 'tr' ? "Orta Notalar (Kalp):" : "Heart:"}
                             </span>
                             <span className="text-[#f5f0e6]/70 truncate max-w-[200px]">
-                              {(language === 'tr'
-                                ? (((res.perfume as any).notes_tr?.mid?.length ? (res.perfume as any).notes_tr.mid : null) ?? res.perfume.notes.mid)
-                                : (((res.perfume as any).notes_en?.mid?.length ? (res.perfume as any).notes_en.mid : null) ?? res.perfume.notes.mid)
-                              ).join(", ")}
+                              {resolveNotes(res.perfume as any, 'mid').join(", ")}
                             </span>
                           </div>
                           <div className="flex justify-between">
@@ -905,10 +922,7 @@ export default function ConsultantPage() {
                               {language === 'tr' ? "Alt Notalar (Dip):" : "Base:"}
                             </span>
                             <span className="text-[#f5f0e6]/70 truncate max-w-[200px]">
-                              {(language === 'tr'
-                                ? (((res.perfume as any).notes_tr?.base?.length ? (res.perfume as any).notes_tr.base : null) ?? res.perfume.notes.base)
-                                : (((res.perfume as any).notes_en?.base?.length ? (res.perfume as any).notes_en.base : null) ?? res.perfume.notes.base)
-                              ).join(", ")}
+                              {resolveNotes(res.perfume as any, 'base').join(", ")}
                             </span>
                           </div>
                         </div>

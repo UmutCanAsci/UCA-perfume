@@ -95,7 +95,10 @@ export default function Home() {
   const [visibleCount, setVisibleCount] = useState(4);
   const [visibleReviewCount, setVisibleReviewCount] = useState(3);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const handleSidebarEnter = () => {
     if (collapseTimerRef.current) clearTimeout(collapseTimerRef.current);
@@ -236,6 +239,131 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#f5f0e6] font-sans selection:bg-[#c5a880] selection:text-black flex overflow-x-hidden max-w-full">
 
+      {/* ─── MOBILE HAMBURGER BUTTON — hidden on md+ (desktop has sidebar) ─── */}
+      <button
+        onClick={() => setIsMobileMenuOpen(true)}
+        aria-label="Open navigation menu"
+        className="md:hidden fixed top-4 left-4 z-[70] p-2 rounded-md bg-black/75 backdrop-blur-md border border-[#c5a880]/20 text-[#c5a880] hover:text-white hover:bg-[#c5a880]/10 transition-all duration-200"
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+
+      {/* ─── MOBILE NAVIGATION DRAWER ─── */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop — tapping closes the drawer */}
+            <motion.div
+              key="mobile-drawer-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={closeMobileMenu}
+              className="md:hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-[65]"
+            />
+
+            {/* Drawer panel — slides in from left */}
+            <motion.nav
+              key="mobile-drawer-panel"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="md:hidden fixed top-0 left-0 bottom-0 w-72 z-[68] bg-black/95 backdrop-blur-2xl border-r border-[#c5a880]/30 shadow-[10px_0_40px_rgba(0,0,0,0.8)] flex flex-col"
+            >
+              {/* Header row: logo + close button */}
+              <div className="flex items-center justify-between h-16 px-4 border-b border-[#c5a880]/15 shrink-0">
+                <span className="text-xl font-serif tracking-[0.3em] font-bold gold-gradient-text uppercase">
+                  {dict.hero.title}
+                </span>
+                <button
+                  onClick={closeMobileMenu}
+                  aria-label="Close navigation"
+                  className="w-7 h-7 flex items-center justify-center rounded-md text-[#c5a880]/60 hover:text-[#c5a880] hover:bg-[#c5a880]/10 transition-all duration-200"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Scrollable nav body */}
+              <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col px-3 pt-6 gap-1">
+                <span className="text-[9px] tracking-[0.3em] uppercase text-[#c5a880]/40 font-medium mb-3 pl-1">
+                  {dict.sidebar.navigate}
+                </span>
+
+                <a
+                  href="#encyclopedia"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] uppercase tracking-[0.2em] font-medium text-neutral-300 hover:text-[#c5a880] hover:bg-[#c5a880]/5 transition-all duration-200 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-[#c5a880]/40 group-hover:bg-[#c5a880] transition-colors shrink-0" />
+                  {dict.nav.encyclopedia}
+                </a>
+
+                <a
+                  href="#community"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[11px] uppercase tracking-[0.2em] font-medium text-neutral-300 hover:text-[#c5a880] hover:bg-[#c5a880]/5 transition-all duration-200 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-[#c5a880]/40 group-hover:bg-[#c5a880] transition-colors shrink-0" />
+                  {dict.nav.community}
+                </a>
+
+                <Link
+                  href="/consultant"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-2.5 mt-2 px-3 py-2.5 rounded-lg border border-[#c5a880]/40 hover:border-[#c5a880] bg-[#c5a880]/5 hover:bg-[#c5a880]/12 shadow-[0_0_18px_rgba(197,168,128,0.06)] text-[11px] uppercase tracking-[0.2em] font-medium text-[#e6ca65] transition-all duration-300"
+                >
+                  <Sparkles className="w-3 h-3 text-[#c5a880] shrink-0" />
+                  {dict.nav.consultant}
+                </Link>
+
+                {activeUser?.role === "admin" && (
+                  <Link
+                    href="/admin"
+                    onClick={closeMobileMenu}
+                    className="flex items-center gap-2.5 mt-1 px-3 py-2.5 rounded-lg text-[11px] uppercase tracking-[0.2em] font-medium text-[#D4AF37] hover:text-[#f0d978] hover:bg-[#D4AF37]/5 transition-all duration-200"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse shrink-0" />
+                    {dict.nav.archivist}
+                  </Link>
+                )}
+              </div>
+
+              {/* Footer: language + user */}
+              <div className="shrink-0 px-3 pb-6 pt-4 border-t border-neutral-800/60 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] tracking-[0.3em] uppercase text-[#c5a880]/40 font-medium">
+                    {dict.sidebar.language}
+                  </span>
+                  <button
+                    onClick={toggleLanguage}
+                    title={language === "en" ? "Switch to Turkish" : "Switch to English"}
+                    className="text-[10px] tracking-[0.2em] font-semibold uppercase border border-neutral-700 hover:border-[#c5a880] px-3 py-1 rounded-md text-neutral-300 hover:text-[#c5a880] bg-transparent cursor-pointer transition-all duration-300 select-none leading-none"
+                  >
+                    {language === "en" ? "EN" : "TR"}
+                  </button>
+                </div>
+
+                <Link
+                  href={activeUser ? "/profile" : "/auth"}
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-2.5 border border-[#c5a880]/40 hover:border-[#c5a880] bg-gradient-to-r from-neutral-900 via-[#c5a880]/8 to-neutral-900 hover:via-[#c5a880]/18 px-4 py-2.5 rounded-full text-[11px] uppercase tracking-widest font-semibold text-[#f3e5c8] transition-all duration-300"
+                >
+                  <User className="w-3.5 h-3.5 shrink-0 text-[#c5a880]" />
+                  <span className="truncate">{activeUser ? `@${activeUser.username}` : dict.nav.guest}</span>
+                </Link>
+
+                <p className="text-[9px] tracking-[0.2em] uppercase text-neutral-700">
+                  &copy; {new Date().getFullYear()} {dict.hero.title}
+                </p>
+              </div>
+            </motion.nav>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* ═══════════════════════════════════════════════════════
           COLLAPSIBLE LUXURY SIDEBAR
           Collapsed: w-14 micro-bar (toggle + brand mark)
@@ -258,6 +386,7 @@ export default function Home() {
       </AnimatePresence>
 
       <motion.aside
+
         onMouseEnter={handleSidebarEnter}
         onMouseLeave={handleSidebarLeave}
         animate={{ width: isSidebarExpanded ? "18rem" : "3.5rem" }}
