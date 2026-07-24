@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useScentSphere } from "@/components/ScentSphereContext";
 import { translateRaw } from "@/data/translations";
+import { perfumes as staticPerfumeCatalogue } from "@/data/perfumes";
 import type { WizardAnswers } from "@/lib/matchmaking";
 import type { Perfume } from "@/types/perfume";
 
@@ -69,11 +70,12 @@ export default function ConsultantPage() {
   const [results, setResults] = useState<RecommendationResult[]>([]);
 
   // ── Locale-aware description resolver ─────────────────────────────────────
-  // The live DB may have mainDescriptionEn = null for some perfumes.
-  // Fall back to the static perfumesData.json seed (always bilingual) so EN
-  // users never see Turkish text regardless of DB completeness.
+  // Priority: DB bilingual field → static catalogue → other-locale fallback.
+  // The static perfumesData.json/perfumes.ts always has correct English text,
+  // so EN users never see Turkish even if the DB mainDescriptionEn is stale.
   const resolveDesc = (perfume: Perfume & Record<string, any>): string => {
     const staticSeed = perfumes.find(p => p.id === perfume.id);
+    const catalogueEntry = staticPerfumeCatalogue.find(p => p.id === perfume.id);
     if (language === 'tr') {
       return perfume.description_tr
         || staticSeed?.description_tr
@@ -82,26 +84,73 @@ export default function ConsultantPage() {
         || perfume.description
         || '';
     }
+    // EN: prefer API's mainDescriptionEn, then static sources, then TR fallback
     return perfume.description_en
+      || catalogueEntry?.mainDescriptionEn
       || staticSeed?.description_en
       || perfume.description_tr
+      || catalogueEntry?.mainDescription
       || staticSeed?.description_tr
       || perfume.description
       || '';
   };
 
   // ── Locale-aware notes resolver ────────────────────────────────────────────
-  // notes_en / notes_tr come from the API; notes (base field) is always EN.
-  // Guard against empty arrays (truthy but useless) and missing properties.
+  // The consultant API returns bilingual note objects:
+  //   notes_en: { top, mid, base }  ← English note names from DB (noteNameEn)
+  //   notes_tr: { top, mid, base }  ← Turkish note names from DB (noteNameTr)
+  //
+  // However, if a perfume's noteNameEn field in the DB contains a Turkish string
+  // (e.g. because the translation map was incomplete at seed time), we fall back
+  // to the guaranteed-English notes in the authoritative perfumes.ts catalogue.
+  //
+  // Fallback chain for EN:
+  //   1. notes_en[layer] from the consultant API (DB noteNameEn)
+  //   2. catalogueEntry.notesEn[layerKey] from perfumes.ts (guaranteed English)
+  //   3. perfume.notes[layer] base field
+  //
+  // Fallback chain for TR:
+  //   1. notes_tr[layer] from the consultant API (DB noteNameTr)
+  //   2. catalogueEntry.notes[layerKey] from perfumes.ts (Turkish source data)
+  //   3. notes_en[layer] from the consultant API (cross-locale fallback)
+  //   4. perfume.notes[layer] base field
   const resolveNotes = (
     perfume: Perfume & Record<string, any>,
     layer: 'top' | 'mid' | 'base'
   ): string[] => {
-    const apiKey = language === 'tr' ? 'notes_tr' : 'notes_en';
-    const apiArr: string[] | undefined = perfume[apiKey]?.[layer];
-    if (Array.isArray(apiArr) && apiArr.length > 0) return apiArr;
-    // Fall back to the base notes field (always English from the API)
-    return perfume.notes[layer] ?? [];
+    // Map API layer key ('top'|'mid'|'base') → perfumes.ts key ('bas'|'kalp'|'dip')
+    const layerKeyMap: Record<string, 'bas' | 'kalp' | 'dip'> = {
+      top: 'bas',
+      mid: 'kalp',
+      base: 'dip',
+    };
+    const sourceKey = layerKeyMap[layer];
+    const catalogueEntry = staticPerfumeCatalogue.find(p => p.id === perfume.id);
+
+    if (language === 'tr') {
+      // 1. Turkish notes from consultant API (noteNameTr per DB row)
+      const trArr: string[] | undefined = perfume.notes_tr?.[layer];
+      if (Array.isArray(trArr) && trArr.length > 0) return trArr;
+      // 2. Turkish source notes from perfumes.ts (notes.bas / notes.kalp / notes.dip)
+      const catTrArr = catalogueEntry?.notes?.[sourceKey];
+      if (Array.isArray(catTrArr) && catTrArr.length > 0) return catTrArr;
+      // 3. Cross-locale fallback: English notes from API
+      const enArr: string[] | undefined = perfume.notes_en?.[layer];
+      if (Array.isArray(enArr) && enArr.length > 0) return enArr;
+      return (perfume.notes?.[layer] as string[] | undefined) ?? [];
+    }
+
+    // EN path:
+    // 1. English notes from consultant API (noteNameEn per DB row)
+    const enArr: string[] | undefined = perfume.notes_en?.[layer];
+    if (Array.isArray(enArr) && enArr.length > 0) return enArr;
+
+    // 2. Authoritative English notes from perfumes.ts (notesEn.bas / .kalp / .dip)
+    const catEnArr = catalogueEntry?.notesEn?.[sourceKey];
+    if (Array.isArray(catEnArr) && catEnArr.length > 0) return catEnArr;
+
+    // 3. Final fallback: base notes field on the perfume object
+    return (perfume.notes?.[layer] as string[] | undefined) ?? [];
   };
 
   useEffect(() => {
