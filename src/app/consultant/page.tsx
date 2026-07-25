@@ -307,9 +307,7 @@ export default function ConsultantPage() {
           
           <div className="w-48 h-[1px] bg-gradient-to-r from-transparent via-[#c5a880] to-transparent mx-auto mt-4" />
           <p className="text-[10px] text-[#f5f0e6]/45 leading-relaxed font-light uppercase tracking-widest">
-            {language === 'tr'
-              ? "Katalog notaları filtreleniyor, yayılım zarfları eşleştiriliyor ve mevsimsel parametreler analiz ediliyor."
-              : "Filtering catalog notes, matching sillage envelopes, and evaluating seasonal parameters"}
+            {t("formulatingProgress")}
           </p>
         </motion.div>
       </div>

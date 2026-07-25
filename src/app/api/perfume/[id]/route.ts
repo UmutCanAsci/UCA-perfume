@@ -81,11 +81,14 @@ export async function GET(
     const seasons   = rawPerfume.seasons.split(",").map((s) => s.trim()).filter(Boolean);
     const occasions = rawPerfume.occasions.split(",").map((s) => s.trim()).filter(Boolean);
 
+    // ── Enum → canonical key (frontend handles display via translateRaw) ──────
+    const concentrationKey = String(rawPerfume.concentration);
+
     const shaped = {
       id:            rawPerfume.id,
       name:          rawPerfume.name,
       brand:         rawPerfume.brand,
-      concentration: CONCENTRATION_DISPLAY[rawPerfume.concentration] ?? rawPerfume.concentration,
+      concentration: concentrationKey,
       gender:        rawPerfume.gender,
 
       mainDescription:  rawPerfume.mainDescriptionTr,
@@ -124,8 +127,9 @@ export async function GET(
 
       rating:       5.0,
       yearReleased: 2024,
-      sillage:      "Moderate",
-      longevity:    "Long-Lasting",
+      // Return canonical keys — frontend translateRaw() resolves to active locale
+      sillage:      "MODERATE",
+      longevity:    "LONG-LASTING",
 
       reviews: rawPerfume.reviews.map((r) => ({
         id:      String(r.id),

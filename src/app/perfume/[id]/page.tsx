@@ -26,6 +26,7 @@ import { useScentSphere } from "@/components/ScentSphereContext";
 import { Lock, Unlock, User as UserIcon } from "lucide-react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { translateRaw, translateComment } from "@/data/translations";
+import { getLocalizedField } from "@/lib/i18n";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -183,7 +184,7 @@ export default function PerfumePage({ params }: PageProps) {
       <div className="min-h-screen bg-[#050505] text-[#f5f0e6] flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="w-10 h-10 border border-[#c5a880]/30 border-t-[#c5a880] rounded-full animate-spin mx-auto" />
-          <p className="text-[10px] tracking-[0.3em] uppercase text-[#c5a880]/60">Loading Fragrance</p>
+          <p className="text-[10px] tracking-[0.3em] uppercase text-[#c5a880]/60">{dict.common.loading}</p>
         </div>
       </div>
     );
@@ -340,7 +341,7 @@ export default function PerfumePage({ params }: PageProps) {
             onClick={() => setActiveReplyBox({ type: "reply", id: node.reply.id })}
             className="text-[8px] tracking-wider uppercase text-[#c5a880]/60 hover:text-white cursor-pointer"
           >
-            {language === "tr" ? "Yanıtla" : "Reply"}
+            {dict.perfumePage.replyToReview}
           </button>
         </div>
         <p className="text-xs text-[#f5f0e6]/75 font-light leading-relaxed pl-0.5">
@@ -354,7 +355,7 @@ export default function PerfumePage({ params }: PageProps) {
               type="text"
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              placeholder={language === "tr" ? `@${node.reply.user} kullanıcısına yanıt ver...` : `Reply to @${node.reply.user}...`}
+              placeholder={`${dict.perfumePage.replyPlaceholder.replace('...', '')} @${node.reply.user}...`}
               className="flex-1 bg-black/40 border border-[#c5a880]/20 rounded-sm py-1.5 px-2.5 text-[11px] text-white focus:outline-none focus:border-[#c5a880]"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -366,7 +367,7 @@ export default function PerfumePage({ params }: PageProps) {
               onClick={() => handleSendReply(reviewId, node.reply.id)}
               className="bg-[#c5a880] text-black text-[9px] font-bold uppercase px-3 rounded-sm hover:bg-[#e5cda8] transition-colors cursor-pointer"
             >
-              {language === "tr" ? "Gönder" : "Send"}
+              {dict.perfumePage.send}
             </button>
             <button
               onClick={() => setActiveReplyBox(null)}
@@ -394,7 +395,7 @@ export default function PerfumePage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group text-xs tracking-[0.2em] uppercase font-light text-[#f5f0e6]/70 hover:text-[#c5a880] transition-colors duration-300">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            {language === "tr" ? "KÜTÜPHANEYE DÖN" : "BACK TO LIBRARY"}
+            {dict.perfumePage.returnToLibrary}
           </Link>
 
           <Link href="/" className="font-serif text-2xl tracking-[0.2em] gold-gradient-text uppercase font-bold">
@@ -602,23 +603,7 @@ export default function PerfumePage({ params }: PageProps) {
               {dict.perfumePage.olfactoryNarrative}
             </h3>
             <p className="text-sm md:text-base text-[#f5f0e6]/80 leading-relaxed font-light tracking-wide first-letter:text-3xl first-letter:font-serif first-letter:text-[#c5a880] first-letter:mr-2 first-letter:float-left mb-6">
-              {language === 'tr' && perfume.name?.toLowerCase().includes('aventus')
-                ? "Sıra dışı bir koku olan Aventus, ilhamını tarihi bir imparatorun dramatik ve çarpıcı yaşamından alarak gücü, iktidarı ve başarıyı yüceltiyor. 2010 yılında seçkinlerin beğenisine sunulan bu esans, kısa sürede markanın tarihindeki en başarılı koku haline geldi."
-                : language === 'tr' && perfume.name?.toLowerCase().includes('opium')
-                ? "Yves Saint Laurent’dan bağımlılık yaratacak kadar güçlü bir kadın parfümü. Büyüleyici, baştan çıkarıcı ve adeta sarhoş eden bu koku; adrenalin yüklü kahvenin ilk notaları ile vanilyanın tatlı şehvetini, beyaz çiçeklerin yumuşak kollarına bırakıyor."
-                : language === 'tr' && perfume.name?.toLowerCase().includes('shalimar')
-                ? "Bir imparator ile Hint prensesi arasındaki tutkulu aşk hikayesinden ilham alan ve Sanskritçe 'aşk tapınağı' anlamına gelen Shalimar, sonsuza dek sürecek ebedi aşkın sözünü simgeliyor. O, tam anlamıyla arzunun kokusu."
-                : language === 'tr' && perfume.name?.toLowerCase().includes('blooming')
-                ? "Tıpkı çiçeklerle bezeli bir elbise gibi tasarlanan Miss Dior Blooming Bouquet, taze ve ışıltılı bir kompozisyon sunuyor. Bu eşsiz koku buketi, Christian Dior'un çiçeklere olan efsanevi aşkına saygı duruşunda bulunuyor."
-                : language === 'tr' && perfume.name?.toLowerCase().includes('black xs')
-                ? "Black XS; kural tanımaz bir tavra sahip, karanlık, tatlı ve odunsu bir koku. Taze limon ve kalamansi notalarını; tatlı pralin, baharatlı siyah kakule ve derin, gizemli paçuli ile harmanlayan sıra dışı bir parfüm."
-                : language === 'tr' && perfume.name?.toLowerCase().includes('ganymede')
-                ? "Yeni, zarif ve ezber bozan mineral-deri eksenli bir koku. Aydınlık ve derinliğin tezatlığıyla oynayan Ganymede; süet deri notalarını menekşe, mandalina ve mineral-tuzlu ölmez otu ile bir araya getiriyor."
-                : language === 'tr' && perfume.name?.toLowerCase().includes('baccarat rouge')
-                ? "Işıltılı ve sofistike Baccarat Rouge 540, tene kehribar, çiçek ve odunsu notalardan oluşan bir esinti gibi fısıldıyor. Yaseminin uçuşan notaları ile safranın parlaklığının, ambergrisin mineral yönlerini taşıdığı şiirsel bir simya."
-                : language === 'tr' && perfume.name?.toLowerCase().includes('bleu de chanel')
-                ? "Sitrus notalarının canlandırıcı ferahlığını, kuru sedirin odunsu esintisiyle buluşturan aromatik ve odunsu bir koku. Yeni Kaledonya sandal ağacı, geride sıcak ve duyusal bir iz bırakıyor."
-                : (language === 'tr' ? (perfume.description_tr || perfume.description) : (perfume.description_en || perfume.description))}
+              {getLocalizedField(raw, 'description', language) || getLocalizedField(raw, 'mainDescription', language) || ""}
             </p>
 
             {/* Olfactory Blueprint Horizontal Diagnostics Bar */}
@@ -626,10 +611,10 @@ export default function PerfumePage({ params }: PageProps) {
               {/* Performance Section */}
               <div className="flex items-center gap-3 pr-6 border-r border-white/[0.05] shrink-0">
                 <span className="border border-white/[0.06] bg-white/[0.02] text-white/70 px-3 py-1 rounded-full whitespace-nowrap">
-                  {dict.blueprint.sillage}: {perfume.sillage ? (language === 'tr' ? ((perfume.sillage as any)?.toUpperCase() === 'MODERATE' ? 'ORTA' : (perfume.sillage as any)?.toUpperCase() === 'STRONG' ? 'GÜÇLÜ' : 'YOĞUN') : perfume.sillage) : "—"}
+                  {dict.blueprint.sillage}: {perfume.sillage ? translateRaw(String(perfume.sillage).toUpperCase(), language === 'tr') : "—"}
                 </span>
                 <span className="border border-white/[0.06] bg-white/[0.02] text-white/70 px-3 py-1 rounded-full whitespace-nowrap">
-                  {dict.blueprint.longevity}: {perfume.longevity ? (language === 'tr' ? ((perfume.longevity as any)?.toUpperCase() === 'LONG-LASTING' ? 'UZUN SÜRELİ' : (perfume.longevity as any)?.toUpperCase() === 'ETERNAL' ? 'KALICI' : 'ORTA DÜZEY') : perfume.longevity) : "—"}
+                  {dict.blueprint.longevity}: {perfume.longevity ? translateRaw(String(perfume.longevity).toUpperCase(), language === 'tr') : "—"}
                 </span>
               </div>
               {/* Environment Section */}
@@ -670,9 +655,7 @@ export default function PerfumePage({ params }: PageProps) {
                     </span>
                   </div>
                   <p className="text-[11px] text-[#f5f0e6]/50 max-w-md font-light leading-relaxed">
-                    {language === "en"
-                      ? "The immediate sensory introduction. Volatile, sparkling essences that captivate the senses upon initial application."
-                      : "Anlık duyusal giriş. İlk uygulamada duyuları büyüleyen uçucu, parlak esanslar."}
+                    {dict.perfumePage.topNoteDesc}
                   </p>
                 </div>
                 
@@ -719,9 +702,7 @@ export default function PerfumePage({ params }: PageProps) {
                     </span>
                   </div>
                   <p className="text-[11px] text-[#f5f0e6]/50 max-w-md font-light leading-relaxed">
-                    {language === "en"
-                      ? "The core soul of the fragrance. Full-bodied, thematic harmonies that define its character as the head notes evaporate."
-                      : "Kokunun temel ruhu. Üst notalar buharlaştıkça karakterini ortaya koyan dolgun, tematik armoniler."}
+                    {dict.perfumePage.heartNoteDesc}
                   </p>
                 </div>
                 
@@ -768,9 +749,7 @@ export default function PerfumePage({ params }: PageProps) {
                     </span>
                   </div>
                   <p className="text-[11px] text-[#f5f0e6]/50 max-w-md font-light leading-relaxed">
-                    {language === "en"
-                      ? "The profound, lingering foundation. Warm resins, rich woods, or animalic undertones that anchor the perfume to the skin."
-                      : "Derin, kalıcı temel. Parfümü cilde demirleyen sıcak reçineler, zengin odunlar veya hayvansal alt notalar."}
+                    {dict.perfumePage.baseNoteDesc}
                   </p>
                 </div>
                 
@@ -808,7 +787,7 @@ export default function PerfumePage({ params }: PageProps) {
             <div className="flex justify-between items-center">
               <h3 className="text-[10px] tracking-[0.3em] text-[#c5a880] uppercase font-semibold flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" />
-                {language === "tr" ? "TOPLULUK ANALİZİ" : "Community Dialogue"}
+                {dict.perfumePage.communityDialogue}
               </h3>
               <span className="text-[9px] bg-[#c5a880]/10 text-[#c5a880] uppercase tracking-widest px-2.5 py-0.5 rounded-full font-medium">
                 {dict.perfumePage.verifiedReports}
@@ -853,7 +832,7 @@ export default function PerfumePage({ params }: PageProps) {
                         onClick={() => setActiveReplyBox({ type: "review", id: review.id })}
                         className="text-[9px] tracking-wider uppercase text-[#c5a880] hover:text-[#e5cda8] font-semibold cursor-pointer"
                       >
-                        {language === "tr" ? "İncelemeyi Yanıtla" : "Reply to Review"}
+                        {dict.perfumePage.replyToReview}
                       </button>
                     </div>
 
@@ -864,7 +843,7 @@ export default function PerfumePage({ params }: PageProps) {
                           type="text"
                           value={replyText}
                           onChange={(e) => setReplyText(e.target.value)}
-                          placeholder={language === "tr" ? dict.perfumePage.replyPlaceholder : "Reply to this review..."}
+                          placeholder={dict.perfumePage.replyPlaceholder}
                           className="flex-1 bg-black/40 border border-[#c5a880]/20 rounded-sm py-1.5 px-3 text-[11px] text-white focus:outline-none focus:border-[#c5a880]"
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
@@ -876,7 +855,7 @@ export default function PerfumePage({ params }: PageProps) {
                           onClick={() => handleSendReply(review.id)}
                           className="bg-[#c5a880] text-black text-[9px] font-bold uppercase px-3 rounded-sm hover:bg-[#e5cda8] transition-colors cursor-pointer"
                         >
-                          {language === "tr" ? "Gönder" : "Send"}
+                          {dict.perfumePage.send}
                         </button>
                         <button
                           onClick={() => setActiveReplyBox(null)}
@@ -932,7 +911,7 @@ export default function PerfumePage({ params }: PageProps) {
                         required
                         value={newUserName}
                         onChange={(e) => setNewUserName(e.target.value)}
-                        placeholder={language === 'tr' ? "Örn: KokuTutkunu" : "e.g. NoseConnoisseur"} 
+                        placeholder={dict.perfumePage.yourIdentityPlaceholder ?? (language === 'tr' ? "Örn: KokuTutkunu" : "e.g. NoseConnoisseur")} 
                         className="w-full bg-black/40 border border-[#c5a880]/20 rounded-sm py-2 px-3 text-xs text-[#f5f0e6] focus:outline-none focus:border-[#c5a880] transition-colors"
                       />
                     </div>
@@ -985,7 +964,7 @@ export default function PerfumePage({ params }: PageProps) {
                     className="w-full sm:w-auto px-6 py-2.5 bg-[#c5a880] hover:bg-[#e5cda8] disabled:opacity-60 disabled:cursor-not-allowed text-black text-[10px] tracking-[0.25em] uppercase font-bold rounded-sm transition-colors duration-300 flex items-center justify-center gap-2"
                   >
                     {submitting
-                      ? (language === "tr" ? "GÖNDERİLİYOR..." : "SUBMITTING...")
+                      ? dict.common.loading.replace('...', '...')
                       : <>{dict.perfumePage.submitBtn} <Send className="w-3.5 h-3.5" /></>}
                   </button>
                 </form>

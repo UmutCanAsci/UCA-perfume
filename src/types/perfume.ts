@@ -36,8 +36,9 @@ export interface Perfume {
   concentration?: string; // e.g., "Eau de Parfum", "Extrait de Parfum"
   image?: string; // Image path or placeholder
   yearReleased?: number;
-  sillage: 'Intimate' | 'Moderate' | 'Heavy' | 'Nuclear';
-  longevity: 'Ephemeral' | 'Moderate' | 'Long-Lasting' | 'Eternal';
+  /** Accepts both legacy display strings and canonical API enum keys */
+  sillage: 'Intimate' | 'Moderate' | 'Heavy' | 'Nuclear' | 'MODERATE' | 'HEAVY' | 'INTIMATE' | 'NUCLEAR' | string;
+  longevity: 'Ephemeral' | 'Moderate' | 'Long-Lasting' | 'Eternal' | 'LONG-LASTING' | 'EPHEMERAL' | 'ETERNAL' | string;
   seasons: string[];
   occasions: string[];
   audience?: string;

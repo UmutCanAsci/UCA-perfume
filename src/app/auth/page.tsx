@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useScentSphere } from "@/components/ScentSphereContext";
 
 export default function AuthPage() {
-  const { handleLogin, handleSignUp, activeUser, dict, language } = useScentSphere();
+  const { handleLogin, handleSignUp, activeUser, dict } = useScentSphere();
   const router = useRouter();
 
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -23,12 +23,12 @@ export default function AuthPage() {
     setSuccessMsg("");
 
     if (!username.trim() || !password) {
-      setErrorMsg(language === "tr" ? "Lütfen kullanıcı adı ve şifrenizi girin." : "Please enter both username and password.");
+      setErrorMsg(dict.auth.errorEmpty);
       return;
     }
 
     if (!isLoginMode && !email.trim()) {
-      setErrorMsg(language === "tr" ? "Lütfen e-posta adresinizi girin." : "Please enter your email address.");
+      setErrorMsg(dict.auth.emailRequired);
       return;
     }
 
@@ -43,11 +43,11 @@ export default function AuthPage() {
         });
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error || (language === "tr" ? "Giriş başarısız." : "Login failed."));
+          throw new Error(data.error || dict.auth.loginFailed);
         }
         // Sync to the in-memory context so the rest of the UI reflects the logged-in state
         handleLogin(username.trim(), password, data.user);
-        setSuccessMsg(language === "tr" ? "Başarıyla giriş yapıldı!" : "Logged in successfully!");
+        setSuccessMsg(dict.auth.successLogin);
         setTimeout(() => { router.push("/profile"); }, 1000);
       } else {
         // ── Sign-up: persist new user to MySQL ──
@@ -58,15 +58,15 @@ export default function AuthPage() {
         });
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error || (language === "tr" ? "Kayıt başarısız." : "Sign-up failed."));
+          throw new Error(data.error || dict.auth.signupFailed);
         }
         // Bootstrap the in-memory context with the newly created profile
         handleSignUp(username.trim(), password, email.trim(), data.user);
-        setSuccessMsg(language === "tr" ? "Kayıt olundu ve giriş yapıldı!" : "Signed up and logged in successfully!");
+        setSuccessMsg(dict.auth.successSignup);
         setTimeout(() => { router.push("/profile"); }, 1000);
       }
     } catch (err: any) {
-      setErrorMsg(err.message || (language === "tr" ? "Kimlik doğrulama sırasında bir hata oluştu." : "An error occurred during authentication."));
+      setErrorMsg(err.message || dict.auth.authError);
     } finally {
       setLoading(false);
     }
@@ -134,14 +134,14 @@ export default function AuthPage() {
           {!isLoginMode && (
             <div>
               <label className="text-[9px] tracking-widest text-[#f5f0e6]/50 uppercase block mb-1">
-                {language === "tr" ? "E-posta" : "Email"}
+                {dict.auth.emailLabel}
               </label>
               <input
                 id="auth-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={language === "tr" ? "ornek@eposta.com" : "your@email.com"}
+                placeholder={dict.auth.emailPlaceholder}
                 disabled={loading}
                 className="w-full border-b border-white/[0.1] bg-transparent rounded-none py-2 px-1 text-xs text-[#f5f0e6] placeholder-[#f5f0e6]/30 focus:border-[#D4AF37] focus:outline-none transition-all disabled:opacity-50"
               />
@@ -170,7 +170,7 @@ export default function AuthPage() {
             className="w-full py-3 bg-transparent hover:bg-[#D4AF37] text-[#D4AF37] hover:text-[#0F0F10] border border-[#D4AF37]/50 hover:border-[#D4AF37] text-xs font-semibold tracking-[0.2em] uppercase rounded-none transition-all duration-300 cursor-pointer mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading
-              ? (language === "tr" ? "İşleniyor..." : "Processing...")
+              ? dict.auth.processing
               : (isLoginMode ? dict.auth.btnAuth : dict.auth.btnEstablish)}
           </button>
         </form>

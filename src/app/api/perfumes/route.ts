@@ -67,12 +67,15 @@ function shapeRow(row: PerfumeRow) {
   const seasons   = row.seasons.split(",").map((s: string) => s.trim()).filter(Boolean);
   const occasions = row.occasions.split(",").map((s: string) => s.trim()).filter(Boolean);
 
+  // Return canonical concentration key — frontend uses translateRaw() to localize display
+  const concentrationKey = String(row.concentration);
+
   return {
     id:             row.id,
     name:           row.name,
     brand:          row.brand,
     gender:         row.gender as string,
-    concentration:  CONCENTRATION_DISPLAY[row.concentration] ?? String(row.concentration),
+    concentration:  concentrationKey,
     description:    row.mainDescriptionTr,
     description_tr: row.mainDescriptionTr,
     description_en: row.mainDescriptionEn,
@@ -83,6 +86,9 @@ function shapeRow(row: PerfumeRow) {
       top_tr:  notesTr(NoteLayer.bas),
       mid_tr:  notesTr(NoteLayer.kalp),
       base_tr: notesTr(NoteLayer.dip),
+      top_en:  notesEn(NoteLayer.bas),
+      mid_en:  notesEn(NoteLayer.kalp),
+      base_en: notesEn(NoteLayer.dip),
     },
     olfactoryProfile: profile
       ? { Floral: profile.floral, Woody: profile.woody, Spicy: profile.spicy, Fresh: profile.fresh, Sweet: profile.sweet }
@@ -91,8 +97,9 @@ function shapeRow(row: PerfumeRow) {
     occasions,
     rating:      5.0,
     reviews:     [] as unknown[],
-    sillage:     "Moderate",
-    longevity:   "Long-Lasting",
+    // Return canonical keys — frontend translateRaw() resolves these to the active locale
+    sillage:     "MODERATE",
+    longevity:   "LONG-LASTING",
     yearReleased: 2024,
   };
 }

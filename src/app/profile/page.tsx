@@ -91,7 +91,7 @@ export default function ProfilePage() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group text-xs tracking-[0.2em] uppercase font-light text-[#f5f0e6]/70 hover:text-[#c5a880] transition-colors duration-300">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            {language === "tr" ? "KÜTÜPHANEYE DÖN" : "BACK TO LIBRARY"}
+            {dict.profile.backToLibrary}
           </Link>
 
           <Link href="/" className="font-serif text-2xl tracking-[0.2em] gold-gradient-text uppercase font-bold">
@@ -335,11 +335,11 @@ export default function ProfilePage() {
                             {/* Privacy Badge */}
                             {list.isPrivate ? (
                               <span className="flex items-center gap-1 text-[8px] bg-orange-950/20 border border-orange-800/30 text-orange-400 font-semibold px-2 py-0.5 rounded-sm uppercase tracking-widest">
-                                <Lock className="w-2.5 h-2.5" /> {language === "tr" ? "Gizli" : "Private"}
+                                <Lock className="w-2.5 h-2.5" /> {dict.profile.listPrivate}
                               </span>
                             ) : (
                               <span className="flex items-center gap-1 text-[8px] bg-green-500/5 border border-green-500/20 text-[#c5a880] font-semibold px-2 py-0.5 rounded-sm uppercase tracking-widest">
-                                <Unlock className="w-2.5 h-2.5" /> {language === "tr" ? "Açık" : "Public"}
+                                <Unlock className="w-2.5 h-2.5" /> {dict.profile.listPublic}
                               </span>
                             )}
                           </div>
@@ -356,16 +356,16 @@ export default function ProfilePage() {
                             <button
                               onClick={() => toggleListPrivacy(list.id, !list.isPrivate)}
                               className="px-2.5 py-1 border border-[#c5a880]/20 hover:border-[#c5a880] rounded-sm text-[8px] tracking-wider uppercase text-[#c5a880] transition-colors cursor-pointer bg-transparent"
-                              title={list.isPrivate ? (language === "tr" ? "Herkese Açık Yap" : "Make Public") : (language === "tr" ? "Gizli Yap" : "Make Private")}
+                              title={list.isPrivate ? dict.profile.listMakePublic : dict.profile.listMakeLock}
                             >
-                              {list.isPrivate ? (language === "tr" ? "Herkese Açık Yap" : "Make Public") : (language === "tr" ? "Kilitle / Gizle" : "Lock / Hide")}
+                              {list.isPrivate ? dict.profile.listMakePublic : dict.profile.listMakeLock}
                             </button>
 
                             {/* Delete List */}
                             <button
                               onClick={() => deleteCustomList(list.id)}
                               className="p-1.5 border border-red-500/10 hover:border-red-500 text-red-500 hover:bg-red-500/5 rounded-sm transition-all cursor-pointer"
-                              title={language === "tr" ? "Listeyi Sil" : "Delete List"}
+                              title={dict.profile.listDelete}
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -376,7 +376,7 @@ export default function ProfilePage() {
                       {/* Perfumes inside the list */}
                       {list.perfumeIds.length === 0 ? (
                         <p className="text-[9px] text-[#f5f0e6]/25 uppercase tracking-widest italic py-2">
-                          {language === "tr" ? "Bu koleksiyona koku eklenmedi. Katalogdan koku ekleyin." : "No scents added to this collection. Add scents from the catalog."}
+                          {dict.profile.listNoScents}
                         </p>
                       ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">

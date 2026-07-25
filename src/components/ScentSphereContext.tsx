@@ -299,12 +299,22 @@ export const ScentSphereProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const t = (key: string): string => {
     const keys = key.split('.');
+    // Try the active language first
     let current: any = dict;
     for (const k of keys) {
       if (current && typeof current === 'object' && k in current) {
         current = current[k];
       } else {
-        return key;
+        // Fallback: try English dictionary so missing TR keys degrade gracefully
+        let fallback: any = dictionaries.en;
+        for (const fk of keys) {
+          if (fallback && typeof fallback === 'object' && fk in fallback) {
+            fallback = fallback[fk];
+          } else {
+            return key; // Key does not exist in either locale — return key path
+          }
+        }
+        return typeof fallback === 'string' ? fallback : key;
       }
     }
     return typeof current === 'string' ? current : key;
@@ -317,8 +327,8 @@ export const ScentSphereProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const currentUser = activeUser || {
     username: "Guest",
-    displayName: "Guest Connoisseur",
-    bio: "Anonymous browsing session",
+    displayName: dict.profile?.guestName ?? "Guest Connoisseur",
+    bio: dict.profile?.guestBio ?? "Anonymous browsing session",
     wardrobe: [],
     favorites: [],
     customLists: []

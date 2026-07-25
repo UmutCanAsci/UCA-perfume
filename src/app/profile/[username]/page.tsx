@@ -25,7 +25,7 @@ export default function PublicProfilePage({ params }: PageProps) {
   const resolvedParams = use(params);
   const username = resolvedParams.username;
 
-  const { userProfiles, submittedReviews, perfumes } = useScentSphere();
+  const { userProfiles, submittedReviews, perfumes, dict, language } = useScentSphere();
 
   // Find profile
   const profile = userProfiles[username];
@@ -54,15 +54,15 @@ export default function PublicProfilePage({ params }: PageProps) {
     return (
       <div className="min-h-screen bg-[#050505] text-[#f5f0e6] flex flex-col items-center justify-center p-6 selection:bg-[#c5a880] selection:text-black">
         <div className="glass-premium p-12 text-center max-w-md rounded-sm">
-          <h1 className="font-serif text-3xl tracking-widest uppercase mb-4 text-[#c5a880]">Profile Void</h1>
+          <h1 className="font-serif text-3xl tracking-widest uppercase mb-4 text-[#c5a880]">{dict.profile.profileVoid}</h1>
           <p className="text-xs text-[#f5f0e6]/50 tracking-wider mb-8 leading-relaxed">
-            The scent connoisseur you are searching for does not exist in our community archives.
+            {dict.perfumePage.notFoundDesc}
           </p>
           <Link 
             href="/"
             className="px-6 py-3 bg-[#c5a880] hover:bg-[#e5cda8] text-black text-xs font-semibold tracking-widest uppercase rounded-sm transition-colors duration-300 block"
           >
-            Return to Library
+            {dict.profile.backToLibrary}
           </Link>
         </div>
       </div>
@@ -79,15 +79,15 @@ export default function PublicProfilePage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group text-xs tracking-[0.2em] uppercase font-light text-[#f5f0e6]/70 hover:text-[#c5a880] transition-colors duration-300">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Library
+            {dict.profile.backToLibrary}
           </Link>
 
           <Link href="/" className="font-serif text-2xl tracking-[0.2em] gold-gradient-text uppercase font-bold">
-            UCA
+            {dict.hero.title}
           </Link>
 
           <Link href="/consultant" className="text-xs tracking-[0.2em] uppercase font-light text-[#c5a880] hover:text-[#e5cda8] border border-[#c5a880]/30 px-3 py-1 rounded-sm transition-colors">
-            Scent Consultant
+            {dict.nav.consultant}
           </Link>
         </div>
       </header>
@@ -122,15 +122,15 @@ export default function PublicProfilePage({ params }: PageProps) {
             {/* Stats Badges */}
             <div className="flex gap-4">
               <div className="text-center px-4 py-2 border border-[#c5a880]/10 bg-black/40 rounded-sm min-w-[80px]">
-                <span className="text-[9px] tracking-widest text-[#f5f0e6]/40 uppercase block mb-1">Wardrobe</span>
+                <span className="text-[9px] tracking-widest text-[#f5f0e6]/40 uppercase block mb-1">{dict.profile.statsWardrobe}</span>
                 <span className="font-serif text-lg font-bold text-white">{profile.wardrobe.length}</span>
               </div>
               <div className="text-center px-4 py-2 border border-[#c5a880]/10 bg-black/40 rounded-sm min-w-[80px]">
-                <span className="text-[9px] tracking-widest text-[#f5f0e6]/40 uppercase block mb-1">Favorites</span>
+                <span className="text-[9px] tracking-widest text-[#f5f0e6]/40 uppercase block mb-1">{dict.profile.statsFavorites}</span>
                 <span className="font-serif text-lg font-bold text-white">{profile.favorites.length}</span>
               </div>
               <div className="text-center px-4 py-2 border border-[#c5a880]/10 bg-black/40 rounded-sm min-w-[80px]">
-                <span className="text-[9px] tracking-widest text-[#f5f0e6]/40 uppercase block mb-1">Custom Lists</span>
+                <span className="text-[9px] tracking-widest text-[#f5f0e6]/40 uppercase block mb-1">{dict.profile.statsLists}</span>
                 <span className="font-serif text-lg font-bold text-white">{publicCustomLists.length}</span>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function PublicProfilePage({ params }: PageProps) {
 
           <div className="mt-6 pt-6 border-t border-[#c5a880]/10 flex items-center gap-1.5 text-[9px] tracking-widest uppercase text-[#c5a880]/80">
             <ShieldCheck className="w-4 h-4" />
-            <span>Browsing public verified fragrance shelves</span>
+            <span>{dict.profile.browsingPublic}</span>
           </div>
         </section>
 
@@ -151,12 +151,12 @@ export default function PublicProfilePage({ params }: PageProps) {
             <section className="glass-premium p-6 rounded-sm border border-[#c5a880]/15 bg-black/25">
               <div className="flex items-center justify-between border-b border-[#c5a880]/10 pb-3 mb-4">
                 <h3 className="font-serif text-sm tracking-wider uppercase font-semibold text-white flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-[#c5a880]" /> Wardrobe
+                  <Clock className="w-4 h-4 text-[#c5a880]" /> {dict.profile.wardrobeTitle}
                 </h3>
               </div>
 
               {profile.wardrobe.length === 0 ? (
-                <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest text-center py-6">Wardrobe shelf is empty.</p>
+                <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest text-center py-6">{dict.profile.emptyShelf}</p>
               ) : (
                 <div className="space-y-3">
                   {profile.wardrobe.map(id => {
@@ -179,12 +179,12 @@ export default function PublicProfilePage({ params }: PageProps) {
             <section className="glass-premium p-6 rounded-sm border border-[#c5a880]/15 bg-black/25">
               <div className="flex items-center justify-between border-b border-[#c5a880]/10 pb-3 mb-4">
                 <h3 className="font-serif text-sm tracking-wider uppercase font-semibold text-white flex items-center gap-2">
-                  <Heart className="w-4 h-4 text-[#c5a880]" /> Favorites
+                  <Heart className="w-4 h-4 text-[#c5a880]" /> {dict.profile.favTitle}
                 </h3>
               </div>
 
               {profile.favorites.length === 0 ? (
-                <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest text-center py-6">Favorites shelf is empty.</p>
+                <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest text-center py-6">{dict.profile.emptyFavorites}</p>
               ) : (
                 <div className="space-y-3">
                   {profile.favorites.map(id => {
@@ -210,15 +210,15 @@ export default function PublicProfilePage({ params }: PageProps) {
               <div className="flex items-center justify-between border-b border-[#c5a880]/10 pb-3 mb-6">
                 <div>
                   <h3 className="font-serif text-sm tracking-wider uppercase font-semibold text-white flex items-center gap-2">
-                    <Bookmark className="w-4 h-4 text-[#c5a880]" /> Scent Collections
+                    <Bookmark className="w-4 h-4 text-[#c5a880]" /> {dict.profile.customTitle}
                   </h3>
-                  <p className="text-[9px] text-[#f5f0e6]/45 uppercase mt-0.5 tracking-wider">Curated scent collections & staples</p>
+                  <p className="text-[9px] text-[#f5f0e6]/45 uppercase mt-0.5 tracking-wider">{dict.profile.listSubtitle}</p>
                 </div>
               </div>
 
               {publicCustomLists.length === 0 ? (
                 <div className="py-16 text-center">
-                  <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest">No public scent lists found.</p>
+                  <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest">{dict.profile.emptyLists}</p>
                 </div>
               ) : (
                 <div className="space-y-8">
@@ -228,7 +228,7 @@ export default function PublicProfilePage({ params }: PageProps) {
                         <div className="flex items-center gap-2">
                           <h4 className="font-serif text-sm tracking-wide font-semibold text-white">{list.name}</h4>
                           <span className="flex items-center gap-1 text-[8px] bg-green-500/5 border border-green-500/20 text-[#c5a880] font-semibold px-2 py-0.5 rounded-sm uppercase tracking-widest">
-                            <Unlock className="w-2.5 h-2.5" /> Public Collection
+                            <Unlock className="w-2.5 h-2.5" /> {dict.profile.listPublic}
                           </span>
                         </div>
                         {list.description && (
@@ -268,17 +268,17 @@ export default function PublicProfilePage({ params }: PageProps) {
           <div className="flex items-center justify-between border-b border-[#c5a880]/10 pb-3 mb-6">
             <div>
               <h3 className="font-serif text-sm tracking-wider uppercase font-semibold text-white flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-[#c5a880]" /> Sensory Reviews Feed
+                <MessageSquare className="w-4 h-4 text-[#c5a880]" /> {dict.profile.reviewsTitle}
               </h3>
-              <p className="text-[9px] text-[#f5f0e6]/45 uppercase mt-0.5 tracking-wider">Automated registry of published olfactory reports</p>
+              <p className="text-[9px] text-[#f5f0e6]/45 uppercase mt-0.5 tracking-wider">{dict.profile.reviewsSubtitle}</p>
             </div>
             <span className="text-[9px] bg-[#c5a880]/10 text-[#c5a880] uppercase tracking-widest px-2.5 py-0.5 rounded-full font-medium">
-              {userReviews.length} Reports
+              {userReviews.length} {dict.profile.reviewsReport}
             </span>
           </div>
 
           {userReviews.length === 0 ? (
-            <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest text-center py-10">This connoisseur has not submitted any olfactory reports yet.</p>
+            <p className="text-[10px] text-[#f5f0e6]/30 uppercase tracking-widest text-center py-10">{dict.profile.reviewsEmpty}</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {userReviews.map((review) => (
@@ -303,8 +303,8 @@ export default function PublicProfilePage({ params }: PageProps) {
                     </p>
                   </div>
                   <div className="flex justify-between items-center text-[9px] text-[#f5f0e6]/35 border-t border-white/5 pt-3">
-                    <span>OLFACTORY LOG</span>
-                    <span>PUBLISHED: {review.date}</span>
+                    <span>{dict.profile.reviewsLog}</span>
+                    <span>{dict.profile.reviewsPublished} {review.date}</span>
                   </div>
                 </div>
               ))}
@@ -317,10 +317,10 @@ export default function PublicProfilePage({ params }: PageProps) {
       {/* Footer */}
       <footer className="bg-black border-t border-[#c5a880]/15 py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-[#f5f0e6]/30 tracking-widest uppercase">
-          <span>© {new Date().getFullYear()} UCA. All Rights Reserved.</span>
+          <span>© {new Date().getFullYear()} {dict.hero.title}. {dict.footer.rights}</span>
           <div className="flex gap-6">
-            <span className="cursor-pointer hover:text-[#c5a880] transition-colors">Privacy Policy</span>
-            <span className="cursor-pointer hover:text-[#c5a880] transition-colors">Terms of Service</span>
+            <span className="cursor-pointer hover:text-[#c5a880] transition-colors">{dict.footer.privacy}</span>
+            <span className="cursor-pointer hover:text-[#c5a880] transition-colors">{dict.footer.terms}</span>
           </div>
         </div>
       </footer>

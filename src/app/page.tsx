@@ -943,9 +943,9 @@ export default function Home() {
                 </div>
 
                 <p className="text-xs text-[#f5f0e6]/60 leading-relaxed font-light line-clamp-3 mb-6">
-                  {language === "tr"
+                  {(language === "tr"
                     ? ((perfume as any).description_tr || (perfume as any).mainDescriptionTr || perfume.description)
-                    : ((perfume as any).description_en || (perfume as any).mainDescriptionEn || perfume.description)}
+                    : ((perfume as any).description_en || (perfume as any).mainDescriptionEn || perfume.description))}
                 </p>
               </div>
 
@@ -1026,7 +1026,7 @@ export default function Home() {
               }}
               className="tracking-[0.2em] text-xs font-medium text-[#c5a880]/70 hover:text-[#c5a880] transition-colors duration-300 uppercase cursor-pointer"
             >
-              {language === "tr" ? "DAHA FAZLA KEŞFET ➔" : "MORE TO EXPLORE ➔"}
+              {dict.encyclopedia.moreToExplore}
             </button>
           </div>
         )}
@@ -1827,7 +1827,7 @@ export default function Home() {
                   {/* Scent Radar Chart */}
                   <div className="mt-8 mb-6 flex flex-col items-center">
                     <span className="text-[8px] tracking-[0.25em] uppercase text-[#c5a880]/80 self-start mb-3">
-                      {language === "tr" ? "KOKU İMZASI" : "Scent Signature"}
+                      {dict.perfumePage.scentSignature}
                     </span>
                     {mounted ? (
                       <div className="w-full h-[200px] flex items-center justify-center">
@@ -1860,7 +1860,7 @@ export default function Home() {
                       </div>
                     ) : (
                       <div className="h-[200px] flex items-center justify-center text-[9px] text-[#f5f0e6]/20 tracking-wider">
-                        LOADING SIGNATURE...
+                        {dict.common.loadingSignature}
                       </div>
                     )}
                   </div>
@@ -1874,7 +1874,7 @@ export default function Home() {
                         <span className="text-xs font-semibold">{selectedPerfume.rating} / 5</span>
                       </div>
                       <span className="text-[9px] tracking-wider text-[#f5f0e6]/40 uppercase">
-                        {language === "tr" ? "YAYINLANMA:" : "Released:"} {selectedPerfume.yearReleased}
+                        {dict.perfumePage.released} {selectedPerfume.yearReleased}
                       </span>
                     </div>
 
@@ -1919,7 +1919,7 @@ export default function Home() {
                     {/* Custom Lists select inside details drawer */}
                     {currentUser.customLists.length > 0 && (
                       <div className="mt-1">
-                        <label className="text-[8px] tracking-widest text-[#f5f0e6]/45 uppercase block mb-1">{language === "tr" ? "ÖZEL KÜRASYONA EKLE:" : "ADD TO CUSTOM CURATION:"}</label>
+                        <label className="text-[8px] tracking-widest text-[#f5f0e6]/45 uppercase block mb-1">{dict.perfumePage.addToCurations}</label>
                         <div className="flex flex-wrap gap-1">
                           {currentUser.customLists.map(list => {
                             const hasPerfume = list.perfumeIds.includes(selectedPerfume.id);

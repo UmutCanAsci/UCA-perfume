@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel, Inter } from "next/font/google";
 import "./globals.css";
 import { ScentSphereProvider } from "@/components/ScentSphereContext";
+import { HtmlLangSetter } from "@/components/HtmlLangSetter";
 import { runSyncEngine } from "@/lib/syncEngine";
 
 // Trigger the autonomous sync engine on server startup
@@ -35,6 +36,7 @@ export default function RootLayout({
     <html lang="en" className={`${cinzel.variable} ${inter.variable} h-full overflow-x-hidden`}>
       <body className="min-h-full flex flex-col antialiased bg-background text-foreground overflow-x-hidden w-full max-w-full">
         <ScentSphereProvider>
+          <HtmlLangSetter />
           {children}
         </ScentSphereProvider>
       </body>

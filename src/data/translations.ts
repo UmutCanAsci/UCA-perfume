@@ -61,7 +61,14 @@ export const dictionaries = {
       switchRegister: "SWITCH TO PROFILE CREATION", switchLogin: "SWITCH TO SESSION LOGIN", cancel: "CANCEL AND RETURN",
       errorEmpty: "Please enter both username and password.",
       successLogin: "Logged in successfully!",
-      successSignup: "Signed up and logged in successfully!"
+      successSignup: "Signed up and logged in successfully!",
+      emailLabel: "Email",
+      emailPlaceholder: "your@email.com",
+      processing: "Processing...",
+      loginFailed: "Login failed.",
+      signupFailed: "Sign-up failed.",
+      emailRequired: "Please enter your email address.",
+      authError: "An error occurred during authentication."
     },
     profile: {
       backToLibrary: "BACK TO LIBRARY",
@@ -98,11 +105,31 @@ export const dictionaries = {
       listCreateBtn: "Create Collection",
       removeFromWardrobe: "Remove from Wardrobe",
       removeFromFavorites: "Remove from Favorites",
-      removeFromList: "Remove from list"
+      removeFromList: "Remove from list",
+      loggingOut: "Logging Out...",
+      privateList: "Private List",
+      profileVoid: "Profile Void",
+      browsingPublic: "Browsing public verified fragrance shelves",
+      emptyShelf: "Wardrobe shelf is empty.",
+      guestName: "Guest Connoisseur",
+      guestBio: "Anonymous browsing session"
+    },
+    common: {
+      loading: "Loading...",
+      error: "Error",
+      renderingChart: "RENDERING MOLECULAR CHART...",
+      decodingProfile: "DECODING PROFILE...",
+      loadingSignature: "LOADING SIGNATURE..."
+    },
+    consultant: {
+      scentPyramid: "SCENT PYRAMID",
+      evaporationTimeline: "EVAPORATION TIMELINE",
+      journeyIntro: "Taking you on a unique journey through the art of olfaction..."
     },
     encyclopedia: {
       title: "CURATED ENCYCLOPEDIA",
-      subtitle: "Indulge in a curated collection of iconic creations. Filter by house, notes, or search your preferred fragrance palette to uncover architectural layers of scent."
+      subtitle: "Indulge in a curated collection of iconic creations. Filter by house, notes, or search your preferred fragrance palette to uncover architectural layers of scent.",
+      moreToExplore: "MORE TO EXPLORE ➤"
     },
     community: {
       title: "THE SCENT",
@@ -129,6 +156,8 @@ export const dictionaries = {
       decodingProfile: "DECODING PROFILE...",
       renderingChart: "RENDERING MOLECULAR CHART...",
       loadingSignature: "LOADING SIGNATURE...",
+      scentProfile: "SCENT PROFILE (RADAR)",
+      scentSignature: "Scent Signature",
       reviews: "reviews",
       released: "Released",
       wardrobeAdded: "✓ Wardrobe",
@@ -153,6 +182,7 @@ export const dictionaries = {
       reportLogged: "REPORT LOGGED",
       reportLoggedDesc: "Thank you. Your sensory critique has been queued for verification by our scent consultants.",
       yourIdentity: "YOUR IDENTITY",
+      yourIdentityPlaceholder: "e.g. NoseConnoisseur",
       ratingLabel: "RATING (1 TO 5 STARS)",
       critiqueLabel: "CRITIQUE & SENSORY DESCRIPTION",
       critiquePlaceholder: "Describe the projection, sillage, dry down characteristics and personal associations...",
@@ -166,6 +196,7 @@ export const dictionaries = {
       compareLabel: "Compare",
       renderingChart: "RENDERING MOLECULAR CHART..."
     },
+
     olfactoryDiagnosticsLabel: "OLFACTORY DIAGNOSTICS",
     stepOf: "STEP",
     of: "OF",
@@ -188,6 +219,7 @@ export const dictionaries = {
     generatePrescription: "GENERATE PRESCRIPTION",
     formulating: "FORMULATING PRESCRIPTION...",
     formulatingDesc: "AI ALGORITHMIC MATCHING IN PROGRESS",
+    formulatingProgress: "Filtering catalog notes, matching sillage envelopes, and evaluating seasonal parameters",
     notesPlaceholder: "e.g. vanilla, wood, citrus",
     notesHint: "Separate multiple ingredients with commas",
     preferredIngredients: "PREFERRED INGREDIENTS",
@@ -271,7 +303,14 @@ export const dictionaries = {
       switchRegister: "PROFİL OLUŞTURMAYA GEÇ", switchLogin: "OTURUM GİRİŞİNE GEÇ", cancel: "İPTAL ET VE DÖN",
       errorEmpty: "Lütfen kullanıcı adı ve şifrenizi girin.",
       successLogin: "Başarıyla giriş yapıldı!",
-      successSignup: "Hesap oluşturuldu ve giriş yapıldı!"
+      successSignup: "Hesap oluşturuldu ve giriş yapıldı!",
+      emailLabel: "E-posta",
+      emailPlaceholder: "ornek@eposta.com",
+      processing: "İşleniyor...",
+      loginFailed: "Giriş başarısız.",
+      signupFailed: "Kayıt başarısız.",
+      emailRequired: "Lütfen e-posta adresinizi girin.",
+      authError: "Kimlik doğrulama sırasında bir hata oluştu."
     },
     profile: {
       backToLibrary: "KÜTÜPHANEYE DÖN",
@@ -308,11 +347,31 @@ export const dictionaries = {
       listCreateBtn: "Koleksiyonu Oluştur",
       removeFromWardrobe: "Gardıroptan Çıkar",
       removeFromFavorites: "Favorilerden Çıkar",
-      removeFromList: "Listeden Çıkar"
+      removeFromList: "Listeden Çıkar",
+      loggingOut: "Çıkış Yapılıyor...",
+      privateList: "Gizli Liste",
+      profileVoid: "Profil Bulunamadı",
+      browsingPublic: "Herkese açık doğrulanmış koku rafları görüntüleniyor",
+      emptyShelf: "Gardırop rafı boş.",
+      guestName: "Misafir Koku Meraklısı",
+      guestBio: "Anonim tarama oturumu"
+    },
+    common: {
+      loading: "Yükleniyor...",
+      error: "Hata",
+      renderingChart: "MOLEKÜLER GRAFİK OLUŞTURULUYOR...",
+      decodingProfile: "PROFİL DEŞİFRE EDİLİYOR...",
+      loadingSignature: "İMZA YÜKLENİYOR..."
+    },
+    consultant: {
+      scentPyramid: "KOKU PİRAMİDİ",
+      evaporationTimeline: "BUHARLAŞMA ZAMAN ÇİZELGESİ",
+      journeyIntro: "Sizi koku dünyasında eşsiz bir yolculuğa çıkarıyoruz..."
     },
     encyclopedia: {
       title: "KOKU ANSİKLOPEDİSİ",
-      subtitle: "İkonik kreasyonlardan oluşan özel bir koleksiyonu keşfedin. Kokunun mimari katmanlarını açığa çıkarmak için parfümevine, koku notalarına göre filtreleyin veya dilediğiniz koku paletini arayın."
+      subtitle: "İkonik kreasyonlardan oluşan özel bir koleksiyonu keşfedin. Kokunun mimari katmanlarını açığa çıkarmak için parfümevine, koku notalarına göre filtreleyin veya dilediğiniz koku paletini arayın.",
+      moreToExplore: "DAHA FAZLA KEŞFET ➤"
     },
     community: {
       title: "KOKU",
@@ -339,6 +398,8 @@ export const dictionaries = {
       decodingProfile: "PROFİL DEŞİFRE EDİLİYOR...",
       renderingChart: "MOLEKÜLER GRAFİK OLUŞTURULUYOR...",
       loadingSignature: "İMZA YÜKLENİYOR...",
+      scentProfile: "KOKU PROFİLİ (RADAR)",
+      scentSignature: "Koku İmzası",
       reviews: "inceleme",
       released: "Yayınlandı",
       wardrobeAdded: "✓ Gardırop",
@@ -363,6 +424,7 @@ export const dictionaries = {
       reportLogged: "RAPOR KAYDEDİLDİ",
       reportLoggedDesc: "Teşekkür ederiz. Duyusal incelemeniz koku danışmanlarımız tarafından onaylanmak üzere sıraya alındı.",
       yourIdentity: "KULLANICI ADINIZ",
+      yourIdentityPlaceholder: "Örn: KokuTutkunu",
       ratingLabel: "PUANINIZ",
       critiqueLabel: "YORUMUNUZ",
       critiquePlaceholder: "Kokunun fark edilirliği, kalıcılığı ve size çağrıştırdığı anılar hakkında neler düşünüyorsunuz? Buraya yazın...",
@@ -376,6 +438,7 @@ export const dictionaries = {
       compareLabel: "Karşılaştır",
       renderingChart: "MOLEKÜLER GRAFİK OLUŞTURULUYOR..."
     },
+
     olfactoryDiagnosticsLabel: "KOKU ANALİZİ",
     stepOf: "ADIM",
     of: "/",
@@ -398,6 +461,7 @@ export const dictionaries = {
     generatePrescription: "UYGUN KOKUYU BUL",
     formulating: "SİZE EN UYGUN KOKU BULUNUYOR...",
     formulatingDesc: "AI ALGORİTMİK EŞLEŞTİRME DEVAM EDİYOR",
+    formulatingProgress: "Katalog notaları filtreleniyor, yayılım zarfları eşleştiriliyor ve mevsimsel parametreler analiz ediliyor.",
     notesPlaceholder: "örn. vanilya, odun, narenciye",
     notesHint: "Birden fazla bileşeni virgülle ayırın",
     preferredIngredients: "TERCİH EDİLEN NOTALAR",

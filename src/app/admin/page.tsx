@@ -213,12 +213,8 @@ export default function AdminPage() {
   const [woody, setWoody] = useState(20);
 
   // ── Performance & Environment ───────────────────────────────────────────────
-  const [sillage, setSillage] = useState<
-    "Intimate" | "Moderate" | "Heavy" | "Nuclear"
-  >("Moderate");
-  const [longevity, setLongevity] = useState<
-    "Ephemeral" | "Moderate" | "Long-Lasting" | "Eternal"
-  >("Long-Lasting");
+  const [sillage, setSillage] = useState<string>("Moderate");
+  const [longevity, setLongevity] = useState<string>("Long-Lasting");
 
   // ── Bilingual seasons / occasions (comma-separated) ─────────────────────────
   const [seasonsEn, setSeasonsEn] = useState("Spring, Autumn");

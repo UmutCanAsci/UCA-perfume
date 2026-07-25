@@ -66,12 +66,15 @@ function dbRowToPerfume(row: PerfumeRow): Perfume & {
   const seasons = row.seasons ? row.seasons.split(',').map(s => s.trim()) : [];
   const occasions = row.occasions ? row.occasions.split(',').map(o => o.trim()) : [];
 
+  // Return canonical concentration key — frontend translateRaw() handles display
+  const concentrationKey = String(row.concentration);
+
   return {
     id:             row.id,
     name:           row.name,
     brand:          row.brand,
     gender:         row.gender as Perfume["gender"],
-    concentration:  CONCENTRATION_DISPLAY[row.concentration] ?? row.concentration,
+    concentration:  concentrationKey,
     description:    row.mainDescriptionTr,
     description_tr: row.mainDescriptionTr,
     description_en: row.mainDescriptionEn,
@@ -106,8 +109,9 @@ function dbRowToPerfume(row: PerfumeRow): Perfume & {
     // Defaults for fields the algorithm doesn't use
     rating:       5.0,
     reviews:      [],
-    sillage:      "Moderate",
-    longevity:    "Long-Lasting",
+    // Return canonical keys — frontend translateRaw() resolves to active locale
+    sillage:      "MODERATE",
+    longevity:    "LONG-LASTING",
     yearReleased: 2024,
   };
 }
