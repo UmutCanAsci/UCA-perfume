@@ -34,6 +34,7 @@ import perfumesData from "@/data/perfumesData.json";
 import { Perfume } from "@/types/perfume";
 import { useScentSphere } from "@/components/ScentSphereContext";
 import { translateRaw, translateComment } from "@/data/translations";
+import { localizeSillage, localizeLongevity, localizeOccasion, localizeSeason, localizeNote } from "@/lib/localize";
 
 const brands = [
   "All",
@@ -958,30 +959,30 @@ export default function Home() {
                   
                   <div className="space-y-2">
                     <div className="flex justify-between text-[10px] font-light">
-                      <span className="text-[#f5f0e6]/40 uppercase tracking-wider">Top:</span>
+                      <span className="text-[#f5f0e6]/40 uppercase tracking-wider">{language === "tr" ? "Üst:" : "Top:"}</span>
                       <span className="text-[#f5f0e6]/80 text-right line-clamp-1 truncate max-w-[150px]">
                         {(language === "tr"
                           ? ((perfume.notes as any).top_tr ?? perfume.notes.top)
                           : perfume.notes.top
-                        ).map((n: string) => translateRaw(n, false)).join(", ")}
+                        ).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
                       </span>
                     </div>
                     <div className="flex justify-between text-[10px] font-light">
-                      <span className="text-[#f5f0e6]/40 uppercase tracking-wider">Heart:</span>
+                      <span className="text-[#f5f0e6]/40 uppercase tracking-wider">{language === "tr" ? "Kalp:" : "Heart:"}</span>
                       <span className="text-[#f5f0e6]/80 text-right line-clamp-1 truncate max-w-[150px]">
                         {(language === "tr"
                           ? ((perfume.notes as any).mid_tr ?? perfume.notes.mid)
                           : perfume.notes.mid
-                        ).map((n: string) => translateRaw(n, false)).join(", ")}
+                        ).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
                       </span>
                     </div>
                     <div className="flex justify-between text-[10px] font-light">
-                      <span className="text-[#f5f0e6]/40 uppercase tracking-wider">Base:</span>
+                      <span className="text-[#f5f0e6]/40 uppercase tracking-wider">{language === "tr" ? "Dip:" : "Base:"}</span>
                       <span className="text-[#f5f0e6]/80 text-right line-clamp-1 truncate max-w-[150px]">
                         {(language === "tr"
                           ? ((perfume.notes as any).base_tr ?? perfume.notes.base)
                           : perfume.notes.base
-                        ).map((n: string) => translateRaw(n, false)).join(", ")}
+                        ).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
                       </span>
                     </div>
                   </div>
@@ -1322,7 +1323,7 @@ export default function Home() {
                 >
                   <div className="text-white/50 tracking-widest text-xs font-semibold uppercase">{dict.blueprint.sillage}</div>
                   {selectedComparePerfumes.map(p => {
-                    const val = p.sillage;
+                    const val = localizeSillage(p.sillage, language === "tr");
                     return (
                       <div key={p.id} className="text-xs md:text-sm font-light text-[#f5f0e6]/80 pr-4">
                         {val ? (
@@ -1344,7 +1345,7 @@ export default function Home() {
                 >
                   <div className="text-white/50 tracking-widest text-xs font-semibold uppercase">{dict.blueprint.longevity}</div>
                   {selectedComparePerfumes.map(p => {
-                    const val = p.longevity;
+                    const val = localizeLongevity(p.longevity, language === "tr");
                     return (
                       <div key={p.id} className="text-xs md:text-sm font-light text-[#f5f0e6]/80 pr-4">
                         {val ? (
@@ -1370,7 +1371,7 @@ export default function Home() {
                     return (
                       <div key={p.id} className="flex flex-wrap gap-1.5 pr-4">
                         {vals?.length ? vals.map(s => (
-                          <span key={s} className="text-[9px] bg-white/5 border border-white/5 px-2 py-0.5 rounded-sm text-[#f5f0e6]/80">{s}</span>
+                          <span key={s} className="text-[9px] bg-white/5 border border-white/5 px-2 py-0.5 rounded-sm text-[#f5f0e6]/80">{localizeSeason(s, language === "tr")}</span>
                         )) : "—"}
                       </div>
                     );
@@ -1390,7 +1391,7 @@ export default function Home() {
                     return (
                       <div key={p.id} className="flex flex-wrap gap-1.5 pr-4">
                         {vals?.length ? vals.map(v => (
-                          <span key={v} className="text-[9px] bg-black/40 border border-[#8e7355]/20 px-2 py-0.5 rounded-sm text-[#e5cda8]/75">{v}</span>
+                          <span key={v} className="text-[9px] bg-black/40 border border-[#8e7355]/20 px-2 py-0.5 rounded-sm text-[#e5cda8]/75">{localizeOccasion(v, language === "tr")}</span>
                         )) : "—"}
                       </div>
                     );
@@ -1980,22 +1981,22 @@ export default function Home() {
                     {/* Performance Section */}
                     <div className="flex items-center gap-3 pr-6 border-r border-white/[0.05] shrink-0">
                       <span className="border border-white/[0.06] bg-white/[0.02] text-white/70 px-3 py-1 rounded-full whitespace-nowrap">
-                        {dict.blueprint.sillage}: {selectedPerfume.sillage || "—"}
+                        {dict.blueprint.sillage}: {localizeSillage(selectedPerfume.sillage, language === "tr")}
                       </span>
                       <span className="border border-white/[0.06] bg-white/[0.02] text-white/70 px-3 py-1 rounded-full whitespace-nowrap">
-                        {dict.blueprint.longevity}: {selectedPerfume.longevity || "—"}
+                        {dict.blueprint.longevity}: {localizeLongevity(selectedPerfume.longevity, language === "tr")}
                       </span>
                     </div>
                      {/* Environment Section */}
                     <div className="flex flex-wrap items-center gap-4 text-white/60">
                       <div className="flex items-center gap-1.5">
                         <span className="font-semibold text-[#c5a880]/80">{dict.blueprint.seasons}:</span>
-                        <span>{selectedPerfume.seasons?.map(s => translateRaw(s, language === "tr")).join(", ") || "—"}</span>
+                        <span>{selectedPerfume.seasons?.map(s => localizeSeason(s, language === "tr")).join(", ") || "—"}</span>
                       </div>
                       <div className="w-1 h-1 rounded-full bg-white/20 hidden md:block" />
                       <div className="flex items-center gap-1.5">
                         <span className="font-semibold text-[#c5a880]/80">{dict.blueprint.occasions}:</span>
-                        <span>{selectedPerfume.occasions?.map(o => translateRaw(o, language === "tr")).join(", ") || "—"}</span>
+                        <span>{selectedPerfume.occasions?.map(o => localizeOccasion(o, language === "tr")).join(", ") || "—"}</span>
                       </div>
                     </div>
                   </div>
@@ -2010,7 +2011,7 @@ export default function Home() {
                       <div className="flex flex-wrap gap-1.5">
                         {selectedPerfume.notes.top.map(note => (
                           <span key={note} className="text-[10px] bg-white/5 border border-white/5 px-2.5 py-1 rounded-sm text-[#f5f0e6]/80">
-                            {translateRaw(note, language === "tr")}
+                            {localizeNote(note, language === "tr")}
                           </span>
                         ))}
                       </div>
@@ -2024,7 +2025,7 @@ export default function Home() {
                       <div className="flex flex-wrap gap-1.5">
                         {selectedPerfume.notes.mid.map(note => (
                           <span key={note} className="text-[10px] bg-[#c5a880]/5 border border-[#c5a880]/10 px-2.5 py-1 rounded-sm text-[#c5a880]">
-                            {translateRaw(note, language === "tr")}
+                            {localizeNote(note, language === "tr")}
                           </span>
                         ))}
                       </div>
@@ -2038,7 +2039,7 @@ export default function Home() {
                       <div className="flex flex-wrap gap-1.5">
                         {selectedPerfume.notes.base.map(note => (
                           <span key={note} className="text-[10px] bg-black/40 border border-[#8e7355]/20 px-2.5 py-1 rounded-sm text-[#e5cda8]/60">
-                            {translateRaw(note, language === "tr")}
+                            {localizeNote(note, language === "tr")}
                           </span>
                         ))}
                       </div>

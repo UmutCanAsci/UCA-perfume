@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useScentSphere } from "@/components/ScentSphereContext";
 import { translateRaw } from "@/data/translations";
+import { localizeSillage, localizeLongevity, localizeOccasion, localizeSeason, localizeNote } from "@/lib/localize";
 import { perfumes as staticPerfumeCatalogue } from "@/data/perfumes";
 import type { WizardAnswers } from "@/lib/matchmaking";
 import type { Perfume } from "@/types/perfume";
@@ -127,30 +128,34 @@ export default function ConsultantPage() {
     const sourceKey = layerKeyMap[layer];
     const catalogueEntry = staticPerfumeCatalogue.find(p => p.id === perfume.id);
 
-    if (language === 'tr') {
-      // 1. Turkish notes from consultant API (noteNameTr per DB row)
-      const trArr: string[] | undefined = perfume.notes_tr?.[layer];
-      if (Array.isArray(trArr) && trArr.length > 0) return trArr;
-      // 2. Turkish source notes from perfumes.ts (notes.bas / notes.kalp / notes.dip)
-      const catTrArr = catalogueEntry?.notes?.[sourceKey];
-      if (Array.isArray(catTrArr) && catTrArr.length > 0) return catTrArr;
-      // 3. Cross-locale fallback: English notes from API
+    const getRawList = (): string[] => {
+      if (language === 'tr') {
+        // 1. Turkish notes from consultant API (noteNameTr per DB row)
+        const trArr: string[] | undefined = perfume.notes_tr?.[layer];
+        if (Array.isArray(trArr) && trArr.length > 0) return trArr;
+        // 2. Turkish source notes from perfumes.ts (notes.bas / notes.kalp / notes.dip)
+        const catTrArr = catalogueEntry?.notes?.[sourceKey];
+        if (Array.isArray(catTrArr) && catTrArr.length > 0) return catTrArr;
+        // 3. Cross-locale fallback: English notes from API
+        const enArr: string[] | undefined = perfume.notes_en?.[layer];
+        if (Array.isArray(enArr) && enArr.length > 0) return enArr;
+        return (perfume.notes?.[layer] as string[] | undefined) ?? [];
+      }
+
+      // EN path:
+      // 1. English notes from consultant API (noteNameEn per DB row)
       const enArr: string[] | undefined = perfume.notes_en?.[layer];
       if (Array.isArray(enArr) && enArr.length > 0) return enArr;
+
+      // 2. Authoritative English notes from perfumes.ts (notesEn.bas / .kalp / .dip)
+      const catEnArr = catalogueEntry?.notesEn?.[sourceKey];
+      if (Array.isArray(catEnArr) && catEnArr.length > 0) return catEnArr;
+
+      // 3. Final fallback: base notes field on the perfume object
       return (perfume.notes?.[layer] as string[] | undefined) ?? [];
-    }
+    };
 
-    // EN path:
-    // 1. English notes from consultant API (noteNameEn per DB row)
-    const enArr: string[] | undefined = perfume.notes_en?.[layer];
-    if (Array.isArray(enArr) && enArr.length > 0) return enArr;
-
-    // 2. Authoritative English notes from perfumes.ts (notesEn.bas / .kalp / .dip)
-    const catEnArr = catalogueEntry?.notesEn?.[sourceKey];
-    if (Array.isArray(catEnArr) && catEnArr.length > 0) return catEnArr;
-
-    // 3. Final fallback: base notes field on the perfume object
-    return (perfume.notes?.[layer] as string[] | undefined) ?? [];
+    return getRawList().map(n => localizeNote(n, language === 'tr'));
   };
 
   useEffect(() => {

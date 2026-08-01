@@ -27,6 +27,7 @@ import { Lock, Unlock, User as UserIcon } from "lucide-react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { translateRaw, translateComment } from "@/data/translations";
 import { getLocalizedField } from "@/lib/i18n";
+import { localizeSillage, localizeLongevity, localizeOccasion, localizeSeason, localizeNote } from "@/lib/localize";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -611,22 +612,22 @@ export default function PerfumePage({ params }: PageProps) {
               {/* Performance Section */}
               <div className="flex items-center gap-3 pr-6 border-r border-white/[0.05] shrink-0">
                 <span className="border border-white/[0.06] bg-white/[0.02] text-white/70 px-3 py-1 rounded-full whitespace-nowrap">
-                  {dict.blueprint.sillage}: {perfume.sillage ? translateRaw(String(perfume.sillage).toUpperCase(), language === 'tr') : "—"}
+                  {dict.blueprint.sillage}: {localizeSillage(perfume.sillage, language === 'tr')}
                 </span>
                 <span className="border border-white/[0.06] bg-white/[0.02] text-white/70 px-3 py-1 rounded-full whitespace-nowrap">
-                  {dict.blueprint.longevity}: {perfume.longevity ? translateRaw(String(perfume.longevity).toUpperCase(), language === 'tr') : "—"}
+                  {dict.blueprint.longevity}: {localizeLongevity(perfume.longevity, language === 'tr')}
                 </span>
               </div>
               {/* Environment Section */}
               <div className="flex flex-wrap items-center gap-4 text-white/60">
                 <div className="flex items-center gap-1.5">
                   <span className="font-semibold text-[#c5a880]/80">{dict.blueprint.seasons}:</span>
-                  <span>{perfume.seasons?.map(s => translateRaw(s, language === "tr")).join(", ") || "—"}</span>
+                  <span>{perfume.seasons?.map(s => localizeSeason(s, language === "tr")).join(", ") || "—"}</span>
                 </div>
                 <div className="w-1 h-1 rounded-full bg-white/20 hidden md:block" />
                 <div className="flex items-center gap-1.5">
                   <span className="font-semibold text-[#c5a880]/80">{dict.blueprint.occasions}:</span>
-                  <span>{perfume.occasions?.map(o => (language === 'tr' && (o.toUpperCase().includes('GALA FORMAL') || o.toUpperCase().includes('GALA FORMAL,')) ? 'GALA ŞIKLIĞI' : translateRaw(o, language === 'tr'))).join(", ") || "—"}</span>
+                  <span>{perfume.occasions?.map(o => localizeOccasion(o, language === "tr")).join(", ") || "—"}</span>
                 </div>
               </div>
             </div>
@@ -679,7 +680,7 @@ export default function PerfumePage({ params }: PageProps) {
                       key={`${note}-${index}`}
                       className="text-xs tracking-wider border border-white/[0.06] bg-white/[0.02] py-1.5 px-3 rounded-full text-[#f5f0e6]/80 cursor-default transition-all duration-300"
                     >
-                      {note}
+                      {localizeNote(note, language === 'tr')}
                     </motion.span>
                   ))}
                 </motion.div>
@@ -726,7 +727,7 @@ export default function PerfumePage({ params }: PageProps) {
                       key={`${note}-${index}`}
                       className="text-xs tracking-wider border border-white/[0.06] bg-white/[0.02] py-1.5 px-3 rounded-full text-[#f5f0e6]/80 cursor-default transition-all duration-300"
                     >
-                      {note}
+                      {localizeNote(note, language === 'tr')}
                     </motion.span>
                   ))}
                 </motion.div>
@@ -773,7 +774,7 @@ export default function PerfumePage({ params }: PageProps) {
                       key={`${note}-${index}`}
                       className="text-xs tracking-wider border border-white/[0.06] bg-white/[0.02] py-1.5 px-3 rounded-full text-[#f5f0e6]/80 cursor-default transition-all duration-300"
                     >
-                      {note}
+                      {localizeNote(note, language === 'tr')}
                     </motion.span>
                   ))}
                 </motion.div>
