@@ -34,7 +34,7 @@ import perfumesData from "@/data/perfumesData.json";
 import { Perfume } from "@/types/perfume";
 import { useScentSphere } from "@/components/ScentSphereContext";
 import { translateRaw, translateComment } from "@/data/translations";
-import { localizeSillage, localizeLongevity, localizeOccasion, localizeSeason, localizeNote } from "@/lib/localize";
+import { localizeSillage, localizeLongevity, localizeOccasion, localizeSeason, localizeNote, getLocalizedDescription } from "@/lib/localize";
 
 const brands = [
   "All",
@@ -944,9 +944,7 @@ export default function Home() {
                 </div>
 
                 <p className="text-xs text-[#f5f0e6]/60 leading-relaxed font-light line-clamp-3 mb-6">
-                  {(language === "tr"
-                    ? ((perfume as any).description_tr || (perfume as any).mainDescriptionTr || perfume.description)
-                    : ((perfume as any).description_en || (perfume as any).mainDescriptionEn || perfume.description))}
+                  {getLocalizedDescription(perfume, language === "tr")}
                 </p>
               </div>
 
@@ -1951,9 +1949,7 @@ export default function Home() {
                   </div>
 
                   <p className="text-xs text-[#f5f0e6]/70 leading-relaxed font-light mb-8">
-                    {language === "tr"
-                      ? ((selectedPerfume as any).description_tr || (selectedPerfume as any).mainDescriptionTr || selectedPerfume.description)
-                      : ((selectedPerfume as any).description_en || (selectedPerfume as any).mainDescriptionEn || selectedPerfume.description)}
+                    {getLocalizedDescription(selectedPerfume, language === "tr")}
                   </p>
 
                   {/* Olfactory Blueprint Horizontal Diagnostics Bar */}

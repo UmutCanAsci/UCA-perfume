@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { NoteLayer, Prisma, SeasonEnum, OccasionEnum } from "@prisma/client";
+import { SEASON_MAP, OCCASION_MAP } from "@/lib/localize";
 
 // --- Shared DB row shape ---
 
@@ -39,9 +40,11 @@ function shapeRow(row: PerfumeRow) {
     brand:          row.brand,
     gender:         row.gender,
     concentration:  row.concentration,
-    description:    row.mainDescriptionTr,
-    description_tr: row.mainDescriptionTr,
-    description_en: row.mainDescriptionEn ?? row.mainDescriptionTr,
+    description:       row.mainDescriptionTr,
+    description_tr:    row.mainDescriptionTr,
+    description_en:    row.mainDescriptionEn ?? row.mainDescriptionTr,
+    mainDescriptionTr: row.mainDescriptionTr,
+    mainDescriptionEn: row.mainDescriptionEn ?? row.mainDescriptionTr,
     notes: {
       top:     notesEn(NoteLayer.TOP),
       mid:     notesEn(NoteLayer.HEART),
@@ -124,7 +127,12 @@ export async function POST(req: NextRequest) {
     await prisma.perfumeSeason.deleteMany({ where: { perfumeId: id } });
     if (Array.isArray(body.seasons) && body.seasons.length > 0) {
       await prisma.perfumeSeason.createMany({
-        data: body.seasons.map((season) => ({ perfumeId: id, season })),
+        data: body.seasons.map((season) => ({
+          perfumeId: id,
+          season,
+          seasonTr: SEASON_MAP[season]?.tr ?? String(season),
+          seasonEn: SEASON_MAP[season]?.en ?? String(season),
+        })),
         skipDuplicates: true,
       });
     }
@@ -132,7 +140,12 @@ export async function POST(req: NextRequest) {
     await prisma.perfumeOccasion.deleteMany({ where: { perfumeId: id } });
     if (Array.isArray(body.occasions) && body.occasions.length > 0) {
       await prisma.perfumeOccasion.createMany({
-        data: body.occasions.map((occasion) => ({ perfumeId: id, occasion })),
+        data: body.occasions.map((occasion) => ({
+          perfumeId: id,
+          occasion,
+          occasionTr: OCCASION_MAP[occasion]?.tr ?? String(occasion),
+          occasionEn: OCCASION_MAP[occasion]?.en ?? String(occasion),
+        })),
         skipDuplicates: true,
       });
     }

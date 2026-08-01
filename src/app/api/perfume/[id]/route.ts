@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { NoteLayer, SeasonEnum, OccasionEnum } from "@prisma/client";
+import { SEASON_MAP, OCCASION_MAP } from "@/lib/localize";
 
 export async function GET(
   _req: NextRequest,
@@ -55,10 +56,12 @@ export async function GET(
       brand:            rawPerfume.brand,
       concentration:    rawPerfume.concentration,
       gender:           rawPerfume.gender,
-      mainDescription:  rawPerfume.mainDescriptionTr,
-      description:      rawPerfume.mainDescriptionTr,
-      description_tr:   rawPerfume.mainDescriptionTr,
-      description_en:   rawPerfume.mainDescriptionEn ?? rawPerfume.mainDescriptionTr,
+      mainDescription:   rawPerfume.mainDescriptionTr,
+      description:       rawPerfume.mainDescriptionTr,
+      description_tr:    rawPerfume.mainDescriptionTr,
+      description_en:    rawPerfume.mainDescriptionEn ?? rawPerfume.mainDescriptionTr,
+      mainDescriptionTr: rawPerfume.mainDescriptionTr,
+      mainDescriptionEn: rawPerfume.mainDescriptionEn ?? rawPerfume.mainDescriptionTr,
 
       notes: {
         bas:     notesTr(NoteLayer.TOP),
@@ -155,7 +158,12 @@ export async function PUT(
     if (Array.isArray(body.seasons)) {
       await prisma.perfumeSeason.deleteMany({ where: { perfumeId: id } });
       await prisma.perfumeSeason.createMany({
-        data: body.seasons.map((season) => ({ perfumeId: id, season })),
+        data: body.seasons.map((season) => ({
+          perfumeId: id,
+          season,
+          seasonTr: SEASON_MAP[season]?.tr ?? String(season),
+          seasonEn: SEASON_MAP[season]?.en ?? String(season),
+        })),
         skipDuplicates: true,
       });
     }
@@ -163,7 +171,12 @@ export async function PUT(
     if (Array.isArray(body.occasions)) {
       await prisma.perfumeOccasion.deleteMany({ where: { perfumeId: id } });
       await prisma.perfumeOccasion.createMany({
-        data: body.occasions.map((occasion) => ({ perfumeId: id, occasion })),
+        data: body.occasions.map((occasion) => ({
+          perfumeId: id,
+          occasion,
+          occasionTr: OCCASION_MAP[occasion]?.tr ?? String(occasion),
+          occasionEn: OCCASION_MAP[occasion]?.en ?? String(occasion),
+        })),
         skipDuplicates: true,
       });
     }

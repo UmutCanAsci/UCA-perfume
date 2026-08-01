@@ -27,7 +27,7 @@ import { Lock, Unlock, User as UserIcon } from "lucide-react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { translateRaw, translateComment } from "@/data/translations";
 import { getLocalizedField } from "@/lib/i18n";
-import { localizeSillage, localizeLongevity, localizeOccasion, localizeSeason, localizeNote } from "@/lib/localize";
+import { localizeSillage, localizeLongevity, localizeOccasion, localizeSeason, localizeNote, getLocalizedDescription } from "@/lib/localize";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -601,7 +601,7 @@ export default function PerfumePage({ params }: PageProps) {
               {dict.perfumePage.olfactoryNarrative}
             </h3>
             <p className="text-sm md:text-base text-[#f5f0e6]/80 leading-relaxed font-light tracking-wide first-letter:text-3xl first-letter:font-serif first-letter:text-[#c5a880] first-letter:mr-2 first-letter:float-left mb-6">
-              {getLocalizedField(raw, 'description', language) || getLocalizedField(raw, 'mainDescription', language) || ""}
+              {getLocalizedDescription(raw, language === "tr")}
             </p>
 
             {/* Olfactory Blueprint Horizontal Diagnostics Bar */}

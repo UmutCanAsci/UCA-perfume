@@ -6,6 +6,7 @@
  */
 
 import { translateRaw } from "@/data/translations";
+import { getLocalizedField } from "@/lib/i18n";
 
 export const SILLAGE_MAP: Record<string, { tr: string; en: string }> = {
   MODERATE:    { tr: "Orta", en: "Moderate" },
@@ -226,4 +227,18 @@ export function localizeNote(val: string | undefined | null, isTr: boolean): str
 export function localizeNotes(notes: string[] | undefined | null, isTr: boolean): string[] {
   if (!notes || !Array.isArray(notes)) return [];
   return notes.map(n => localizeNote(n, isTr));
+}
+
+export function getLocalizedDescription(
+  perfume: Record<string, any> | null | undefined,
+  isTr: boolean
+): string {
+  if (!perfume) return "";
+  const lang = isTr ? "tr" : "en";
+  return (
+    getLocalizedField(perfume, "mainDescription", lang) ||
+    getLocalizedField(perfume, "description", lang) ||
+    perfume.description ||
+    ""
+  );
 }
