@@ -115,6 +115,22 @@ const OCCASIONS_BY_ID: Record<string, OccasionEnum[]> = {
   ],
 };
 
+const SEASON_LOCALIZATION: Record<SeasonEnum, { tr: string; en: string }> = {
+  [SeasonEnum.Spring]:     { tr: "İlkbahar", en: "Spring" },
+  [SeasonEnum.Summer]:     { tr: "Yaz", en: "Summer" },
+  [SeasonEnum.Autumn]:     { tr: "Sonbahar", en: "Autumn" },
+  [SeasonEnum.Winter]:     { tr: "Kış", en: "Winter" },
+  [SeasonEnum.AllSeasons]: { tr: "Tüm Mevsimler", en: "All Seasons" },
+};
+
+const OCCASION_LOCALIZATION: Record<OccasionEnum, { tr: string; en: string }> = {
+  [OccasionEnum.CasualEveryday]: { tr: "Günlük Kullanım", en: "Casual Everyday" },
+  [OccasionEnum.OfficeSafe]:     { tr: "Ofis & İş", en: "Office Safe" },
+  [OccasionEnum.DateNight]:      { tr: "Gece Randevusu", en: "Date Night" },
+  [OccasionEnum.GalaFormal]:     { tr: "Gala & Resmi", en: "Gala Formal" },
+  [OccasionEnum.SignatureScent]: { tr: "İmza Koku", en: "Signature Scent" },
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Main Seed Function
 // ─────────────────────────────────────────────────────────────────────────────
@@ -174,6 +190,8 @@ async function main(): Promise<void> {
       data: seasons.map((season) => ({
         perfumeId: source.id,
         season,
+        seasonTr: SEASON_LOCALIZATION[season].tr,
+        seasonEn: SEASON_LOCALIZATION[season].en,
       })),
       skipDuplicates: true,
     });
@@ -189,6 +207,8 @@ async function main(): Promise<void> {
       data: occasions.map((occasion) => ({
         perfumeId: source.id,
         occasion,
+        occasionTr: OCCASION_LOCALIZATION[occasion].tr,
+        occasionEn: OCCASION_LOCALIZATION[occasion].en,
       })),
       skipDuplicates: true,
     });

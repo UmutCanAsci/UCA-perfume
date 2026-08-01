@@ -584,15 +584,12 @@ export default function PerfumePage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="mt-6 flex justify-between items-center bg-black/40 border border-[#c5a880]/10 p-4 rounded-sm">
+          <div className="mt-6 flex items-center bg-black/40 border border-[#c5a880]/10 p-4 rounded-sm">
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-[#c5a880] fill-[#c5a880]" />
               <span className="text-sm font-semibold">{perfume.rating} / 5</span>
               <span className="text-[10px] text-[#f5f0e6]/40 font-light">({allReviews.length} {dict.perfumePage.reviews})</span>
             </div>
-            <span className="text-[10px] text-[#f5f0e6]/40 uppercase tracking-widest">
-              {dict.cards.released} {perfume.yearReleased}
-            </span>
           </div>
         </aside>
 

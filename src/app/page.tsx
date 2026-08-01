@@ -990,11 +990,7 @@ export default function Home() {
               </div>
 
               {/* Card Action / Expand Bottom */}
-              <div className="p-6 bg-black/20 border-t border-[#c5a880]/5 flex justify-between items-center">
-                <span className="text-[10px] tracking-widest text-[#f5f0e6]/50 uppercase">
-                  {dict.cards.released}: {perfume.yearReleased}
-                </span>
-                
+              <div className="p-4 sm:p-5 bg-black/20 border-t border-[#c5a880]/5 flex justify-end items-center">
                 <button 
                   type="button"
                   onClick={(e) => {
@@ -1006,7 +1002,7 @@ export default function Home() {
                       setSelectedPerfume(perfume);
                     }
                   }}
-                  className="text-[10px] tracking-[0.25em] uppercase font-semibold text-[#c5a880] group-hover:text-[#f5f0e6] transition-colors duration-300 flex items-center gap-1.5 cursor-pointer"
+                  className="w-full py-2 px-3 border border-[#c5a880]/20 hover:border-[#c5a880]/60 bg-[#c5a880]/5 hover:bg-[#c5a880]/15 rounded-sm text-[10px] tracking-[0.25em] uppercase font-semibold text-[#c5a880] group-hover:text-[#f5f0e6] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {dict.cards.viewDetails} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
@@ -1177,18 +1173,7 @@ export default function Home() {
                   ))}
                 </div>
 
-                {/* Release Year Row */}
-                <div 
-                  className="grid gap-6 md:gap-8 items-center border-b border-[#c5a880]/5 py-4"
-                  style={{
-                    gridTemplateColumns: `180px repeat(${selectedComparePerfumes.length}, minmax(0, 1fr))`
-                  }}
-                >
-                  <div className="text-white/50 tracking-widest text-xs font-semibold uppercase">{dict.matrix.year}</div>
-                  {selectedComparePerfumes.map(p => (
-                    <div key={p.id} className="text-xs md:text-sm font-light text-[#f5f0e6]/80">{p.yearReleased}</div>
-                  ))}
-                </div>
+
 
                 {/* Audience Row */}
                 <div 
@@ -1869,14 +1854,9 @@ export default function Home() {
 
                 <div className="mt-auto">
                   <div className="flex flex-col gap-2 mb-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 text-[#c5a880] fill-[#c5a880]" />
-                        <span className="text-xs font-semibold">{selectedPerfume.rating} / 5</span>
-                      </div>
-                      <span className="text-[9px] tracking-wider text-[#f5f0e6]/40 uppercase">
-                        {dict.perfumePage.released} {selectedPerfume.yearReleased}
-                      </span>
+                    <div className="flex items-center gap-1">
+                      <Star className="w-3 h-3 text-[#c5a880] fill-[#c5a880]" />
+                      <span className="text-xs font-semibold">{selectedPerfume.rating} / 5</span>
                     </div>
 
                     {/* Shelf controls inside details drawer */}

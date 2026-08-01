@@ -119,6 +119,8 @@ model PerfumeSeason {
   id        Int        @id @default(autoincrement())
   perfumeId String
   season    SeasonEnum
+  seasonTr  String     @default("")
+  seasonEn  String     @default("")
 
   perfume   Perfume    @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
 
@@ -127,11 +129,13 @@ model PerfumeSeason {
 }
 
 model PerfumeOccasion {
-  id        Int          @id @default(autoincrement())
-  perfumeId String
-  occasion  OccasionEnum
+  id         Int          @id @default(autoincrement())
+  perfumeId  String
+  occasion   OccasionEnum
+  occasionTr String       @default("")
+  occasionEn String       @default("")
 
-  perfume   Perfume      @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+  perfume    Perfume      @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
 
   @@unique([perfumeId, occasion])
   @@map("perfume_occasions")
