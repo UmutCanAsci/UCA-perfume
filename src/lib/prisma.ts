@@ -10,7 +10,7 @@
  *   const perfume = await prisma.perfume.findUnique({ where: { id } });
  */
 
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
 // ─── Connection URL helpers ───────────────────────────────────────────────────

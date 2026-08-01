@@ -74,15 +74,9 @@ export default function PerfumePage({ params }: PageProps) {
       .catch(() => setDbLoading(false));
   }, [perfumeId]);
 
-  // Keep using the name `rawPerfume` so every downstream reference is unchanged.
-  // Fall back to static context data (e.g. during the initial fetch flight).
-  const rawPerfume = dbPerfume as unknown as Perfume | undefined;
   const contextPerfume = contextPerfumes.find((p) => p.id === perfumeId);
-
-  // dbPerfume carries bilingual note arrays from the API:
-  //   notes.top_tr / top_en,  mid_tr / mid_en,  base_tr / base_en
-  // seasons and occasions come from the new DB columns (no static maps).
-  const raw = dbPerfume as any; // typed as `any` since the API shape is wider than the static Perfume type
+  const rawPerfume = (dbPerfume || contextPerfume) as unknown as Perfume | undefined;
+  const raw = (dbPerfume || contextPerfume) as any;
 
   const perfume = raw ? {
     id:               raw.id,
@@ -90,30 +84,36 @@ export default function PerfumePage({ params }: PageProps) {
     brand:            raw.brand,
     concentration:    raw.concentration,
     gender:           raw.gender,
-    olfactoryProfile: raw.olfactoryProfile,
+    olfactoryProfile: {
+      Floral: raw.olfactoryProfile?.Floral ?? raw.olfactoryProfile?.floral ?? 0,
+      Woody:  raw.olfactoryProfile?.Woody  ?? raw.olfactoryProfile?.woody  ?? 0,
+      Spicy:  raw.olfactoryProfile?.Spicy  ?? raw.olfactoryProfile?.spicy  ?? 0,
+      Fresh:  raw.olfactoryProfile?.Fresh  ?? raw.olfactoryProfile?.fresh  ?? 0,
+      Sweet:  raw.olfactoryProfile?.Sweet  ?? raw.olfactoryProfile?.sweet  ?? 0,
+    },
     notes: {
       // Language-aware top-level arrays used by most of the existing UI
-      top:     (language === "en" ? (raw.notes?.top_en  ?? raw.notes?.top  ?? []) : (raw.notes?.top_tr  ?? raw.notes?.bas  ?? [])) as string[],
-      mid:     (language === "en" ? (raw.notes?.mid_en  ?? raw.notes?.mid  ?? []) : (raw.notes?.mid_tr  ?? raw.notes?.kalp ?? [])) as string[],
-      base:    (language === "en" ? (raw.notes?.base_en ?? raw.notes?.base ?? []) : (raw.notes?.base_tr ?? raw.notes?.dip  ?? [])) as string[],
+      top:     (language === "en" ? (raw.notes?.top_en  ?? raw.notes?.top  ?? []) : (raw.notes?.top_tr  ?? raw.notes?.bas  ?? raw.notes?.top ?? [])) as string[],
+      mid:     (language === "en" ? (raw.notes?.mid_en  ?? raw.notes?.mid  ?? []) : (raw.notes?.mid_tr  ?? raw.notes?.kalp ?? raw.notes?.mid ?? [])) as string[],
+      base:    (language === "en" ? (raw.notes?.base_en ?? raw.notes?.base ?? []) : (raw.notes?.base_tr ?? raw.notes?.dip  ?? raw.notes?.base ?? [])) as string[],
       // Explicit bilingual variants passed through for language-switched renders
-      top_tr:  (raw.notes?.top_tr  ?? []) as string[],
-      top_en:  (raw.notes?.top_en  ?? []) as string[],
-      mid_tr:  (raw.notes?.mid_tr  ?? []) as string[],
-      mid_en:  (raw.notes?.mid_en  ?? []) as string[],
-      base_tr: (raw.notes?.base_tr ?? []) as string[],
-      base_en: (raw.notes?.base_en ?? []) as string[],
+      top_tr:  (raw.notes?.top_tr  ?? raw.notes?.bas  ?? raw.notes?.top  ?? []) as string[],
+      top_en:  (raw.notes?.top_en  ?? raw.notes?.top  ?? []) as string[],
+      mid_tr:  (raw.notes?.mid_tr  ?? raw.notes?.kalp ?? raw.notes?.mid  ?? []) as string[],
+      mid_en:  (raw.notes?.mid_en  ?? raw.notes?.mid  ?? []) as string[],
+      base_tr: (raw.notes?.base_tr ?? raw.notes?.dip  ?? raw.notes?.base ?? []) as string[],
+      base_en: (raw.notes?.base_en ?? raw.notes?.base ?? []) as string[],
     },
-    seasons:        (raw.seasons  ?? []) as string[],
-    occasions:      (raw.occasions ?? []) as string[],
-    description:    (raw.description_tr ?? raw.description ?? "") as string,
-    description_tr: (raw.description_tr ?? "") as string,
-    description_en: (raw.description_en ?? "") as string,
+    seasons:        (Array.isArray(raw.seasons) ? raw.seasons : typeof raw.seasons === "string" ? raw.seasons.split(",").map((s: string) => s.trim()) : []) as string[],
+    occasions:      (Array.isArray(raw.occasions) ? raw.occasions : typeof raw.occasions === "string" ? raw.occasions.split(",").map((o: string) => o.trim()) : []) as string[],
+    description:    (language === "en" ? (raw.description_en || raw.mainDescriptionEn || raw.description || "") : (raw.description_tr || raw.mainDescriptionTr || raw.description || "")) as string,
+    description_tr: (raw.description_tr ?? raw.mainDescriptionTr ?? raw.description ?? "") as string,
+    description_en: (raw.description_en ?? raw.mainDescriptionEn ?? raw.description ?? "") as string,
     reviews:        (raw.reviews ?? []) as any[],
     rating:         (raw.rating    ?? 5.0)            as number,
     yearReleased:   (raw.yearReleased ?? 2026)         as number,
-    sillage:        (raw.sillage   ?? "Moderate")     as string,
-    longevity:      (raw.longevity ?? "Long-Lasting")  as string,
+    sillage:        (raw.sillage   ?? "MODERATE")     as string,
+    longevity:      (raw.longevity ?? "LONG-LASTING")  as string,
   } : undefined;
 
   const allReviews = perfume ? [
@@ -137,13 +137,13 @@ export default function PerfumePage({ params }: PageProps) {
     setMounted(true);
   }, []);
 
-  // ── Radar chart animation ─────────────────────────────────────────────────
-  // IMPORTANT: this useState + useEffect MUST live here, unconditionally,
-  // above all early-return guards — Rules of Hooks requires a stable call order.
-  // We derive radarData safely, falling back to zeros while the DB fetch is in
-  // flight so the initialiser never depends on conditional data.
-  const safeProfile = (dbPerfume as any)?.olfactoryProfile ?? {
-    Floral: 0, Woody: 0, Spicy: 0, Fresh: 0, Sweet: 0
+  const rawProfile = (dbPerfume as any)?.olfactoryProfile ?? (contextPerfume as any)?.olfactoryProfile;
+  const safeProfile = {
+    Floral: rawProfile?.Floral ?? rawProfile?.floral ?? 0,
+    Woody:  rawProfile?.Woody  ?? rawProfile?.woody  ?? 0,
+    Spicy:  rawProfile?.Spicy  ?? rawProfile?.spicy  ?? 0,
+    Fresh:  rawProfile?.Fresh  ?? rawProfile?.fresh  ?? 0,
+    Sweet:  rawProfile?.Sweet  ?? rawProfile?.sweet  ?? 0,
   };
   const safeMax = Math.max(
     safeProfile.Floral, safeProfile.Woody, safeProfile.Spicy,

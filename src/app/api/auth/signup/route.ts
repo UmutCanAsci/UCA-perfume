@@ -18,7 +18,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 
 // ─── Type for the expected request body ──────────────────────────────────────
 

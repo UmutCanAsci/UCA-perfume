@@ -3,20 +3,14 @@
  * ────────────────────────────────
  * Route Handler: POST /api/consultant
  *
- * Accepts WizardAnswers, fetches all perfumes from MySQL (including notes and
- * olfactory profiles), scores each one with the three-axis weighted algorithm,
- * and returns the top-3 sorted results.
- *
- * Season / Occasion data is now read directly from the `seasons` and `occasions`
- * DB columns (comma-separated English strings) — the static lookup maps that
- * were previously in this file have been removed entirely.
- *
- * Note arrays are returned bilingually so the UI can pick the right language.
+ * Accepts WizardAnswers, fetches all perfumes from MySQL (including notes,
+ * seasons, occasions, and olfactory profiles), scores each one with the
+ * three-axis weighted algorithm, and returns the top-3 sorted results.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { NoteLayer, Prisma } from "@/generated/prisma/client";
+import { NoteLayer, Prisma } from "@prisma/client";
 import { calculateMatchScore, WizardAnswers } from "@/lib/matchmaking";
 import type { Perfume } from "@/types/perfume";
 import { runSyncEngine } from "@/lib/syncEngine";
@@ -25,91 +19,76 @@ import { runSyncEngine } from "@/lib/syncEngine";
 
 const PERFUME_WITH_RELATIONS = {
   include: {
-    notes:            true,
+    notes: {
+      include: { note: true },
+    },
+    seasons: true,
+    occasions: true,
     olfactoryProfile: true,
   },
 } satisfies Prisma.PerfumeFindManyArgs;
 
 type PerfumeRow = Prisma.PerfumeGetPayload<typeof PERFUME_WITH_RELATIONS>;
 
-// ─── Enum → display string ────────────────────────────────────────────────────
-
-const CONCENTRATION_DISPLAY: Record<string, string> = {
-  EAU_DE_PARFUM:   "Eau de Parfum",
-  EXTRAIT:         "Extrait de Parfum",
-  EAU_DE_TOILETTE: "Eau de Toilette",
-};
-
 // ─── Helper: shape DB row → Perfume type for the matchmaking algorithm ────────
-//
-// The matchmaking algorithm reads:
-//   perfume.seasons[]   — English values, e.g. ["Spring", "Summer"]
-//   perfume.occasions[] — English values, e.g. ["Casual Everyday", "Office Safe"]
-//   perfume.notes.top / .mid / .base — English ingredient names (for keyword bonus)
-//   perfume.olfactoryProfile.Floral … Sweet
-//
-// All four are now sourced directly from MySQL — no static fallback maps.
 
 function dbRowToPerfume(row: PerfumeRow): Perfume & {
   notes_tr: { top: string[]; mid: string[]; base: string[] };
   notes_en: { top: string[]; mid: string[]; base: string[] };
 } {
   const notesTr = (layer: NoteLayer): string[] =>
-    (row.notes || []).filter((n) => n.layer === layer).map((n) => n.noteNameTr);
+    (row.notes || [])
+      .filter((n) => n.layer === layer)
+      .map((n) => n.note.nameTr);
 
   const notesEn = (layer: NoteLayer): string[] =>
-    (row.notes || []).filter((n) => n.layer === layer).map((n) => n.noteNameEn);
+    (row.notes || [])
+      .filter((n) => n.layer === layer)
+      .map((n) => n.note.nameEn);
 
   const profile = row.olfactoryProfile;
 
-  // Parse comma-separated DB strings into string arrays
-  const seasons = row.seasons ? row.seasons.split(',').map(s => s.trim()) : [];
-  const occasions = row.occasions ? row.occasions.split(',').map(o => o.trim()) : [];
-
-  // Return canonical concentration key — frontend translateRaw() handles display
-  const concentrationKey = String(row.concentration);
+  const seasons = (row.seasons || []).map((s) => s.season);
+  const occasions = (row.occasions || []).map((o) => o.occasion);
 
   return {
     id:             row.id,
     name:           row.name,
     brand:          row.brand,
     gender:         row.gender as Perfume["gender"],
-    concentration:  concentrationKey,
+    concentration:  row.concentration,
     description:    row.mainDescriptionTr,
     description_tr: row.mainDescriptionTr,
-    description_en: row.mainDescriptionEn,
+    description_en: row.mainDescriptionEn ?? row.mainDescriptionTr,
 
     // Algorithm uses English note names for the keyword-bonus axis
     notes: {
-      top:  notesEn(NoteLayer.bas),
-      mid:  notesEn(NoteLayer.kalp),
-      base: notesEn(NoteLayer.dip),
+      top:  notesEn(NoteLayer.TOP),
+      mid:  notesEn(NoteLayer.HEART),
+      base: notesEn(NoteLayer.BASE),
     },
 
     // Extra bilingual note fields passed through to the results payload
     notes_tr: {
-      top:  notesTr(NoteLayer.bas),
-      mid:  notesTr(NoteLayer.kalp),
-      base: notesTr(NoteLayer.dip),
+      top:  notesTr(NoteLayer.TOP),
+      mid:  notesTr(NoteLayer.HEART),
+      base: notesTr(NoteLayer.BASE),
     },
     notes_en: {
-      top:  notesEn(NoteLayer.bas),
-      mid:  notesEn(NoteLayer.kalp),
-      base: notesEn(NoteLayer.dip),
+      top:  notesEn(NoteLayer.TOP),
+      mid:  notesEn(NoteLayer.HEART),
+      base: notesEn(NoteLayer.BASE),
     },
 
     olfactoryProfile: profile
       ? { Floral: profile.floral, Woody: profile.woody, Spicy: profile.spicy, Fresh: profile.fresh, Sweet: profile.sweet }
       : { Floral: 0, Woody: 0, Spicy: 0, Fresh: 0, Sweet: 0 },
 
-    // Sourced directly from MySQL — no static maps
     seasons,
     occasions,
 
-    // Defaults for fields the algorithm doesn't use
     rating:       5.0,
     reviews:      [],
-    // Return canonical keys — frontend translateRaw() resolves to active locale
     sillage:      "MODERATE",
     longevity:    "LONG-LASTING",
     yearReleased: 2024,
@@ -160,7 +139,6 @@ const MOCKED_FALLBACK_RECOMMENDATIONS = [
 // ─── Route Handler ────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
-  // Trigger sync engine immediately on API hit
   await runSyncEngine();
 
   let answers: WizardAnswers;
@@ -179,13 +157,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Ensure preferredNotesText is securely initialized as string to prevent toLowerCase crashes
   answers.preferredNotesText = String(answers.preferredNotesText || "");
 
   try {
     const rows = await prisma.perfume.findMany(PERFUME_WITH_RELATIONS);
 
-    // Fallback if no perfumes found in DB
     if (!rows || rows.length === 0) {
       console.log("Consultant API: Database is empty. Serving mocked fallback recommendations.");
       return NextResponse.json(MOCKED_FALLBACK_RECOMMENDATIONS);

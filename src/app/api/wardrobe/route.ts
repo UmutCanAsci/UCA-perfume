@@ -33,8 +33,8 @@ export async function POST(request: Request) {
       where: {
         userId_perfumeId: { userId, perfumeId }
       },
-      update: {},
-      create: { userId, perfumeId }
+      update: { status: body.status || "OWNED" },
+      create: { userId, perfumeId, status: body.status || "OWNED" }
     });
 
     return NextResponse.json({ success: true, data: entry }, { status: 201 });

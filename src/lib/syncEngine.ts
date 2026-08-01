@@ -1,27 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { perfumes } from "@/data/perfumes";
-import { Concentration, Gender, NoteLayer } from "@/generated/prisma/client";
-
-// Helpers – source string literals ➜ generated Prisma 7 enum constants
-function toConcentrationEnum(raw: string): Concentration {
-  switch (raw) {
-    case "Eau de Parfum":     return Concentration.EAU_DE_PARFUM;
-    case "Extrait de Parfum": return Concentration.EXTRAIT;
-    case "Eau de Toilette":   return Concentration.EAU_DE_TOILETTE;
-    default:
-      throw new Error(`Unknown concentration: "${raw}"`);
-  }
-}
-
-function toGenderEnum(raw: string): Gender {
-  switch (raw) {
-    case "Men":    return Gender.Men;
-    case "Women":  return Gender.Women;
-    case "Unisex": return Gender.Unisex;
-    default:
-      throw new Error(`Unknown gender: "${raw}"`);
-  }
-}
+import { NoteLayer, SeasonEnum, OccasionEnum } from "@prisma/client";
 
 // Dictionaries
 const EN_DESCRIPTIONS: Record<string, string> = {
@@ -71,38 +50,27 @@ const NOTE_TR_TO_EN: Record<string, string> = {
   "Vanilya":           "Vanilla",
 };
 
-const SEASONS_BY_ID: Record<string, string[]> = {
-  "bleu-de-chanel":          ["Spring", "Summer", "Autumn"],
-  "ganymede":                ["All Seasons", "Spring", "Autumn"],
-  "baccarat-rouge-540-extrait": ["Autumn", "Winter"],
-  "aventus":                 ["Spring", "Summer", "Autumn"],
+const SEASONS_BY_ID: Record<string, SeasonEnum[]> = {
+  "bleu-de-chanel":             [SeasonEnum.Spring, SeasonEnum.Summer, SeasonEnum.Autumn],
+  "ganymede":                   [SeasonEnum.AllSeasons, SeasonEnum.Spring, SeasonEnum.Autumn],
+  "baccarat-rouge-540-extrait": [SeasonEnum.Autumn, SeasonEnum.Winter],
+  "aventus":                    [SeasonEnum.Spring, SeasonEnum.Summer, SeasonEnum.Autumn],
 };
 
-const OCCASIONS_BY_ID: Record<string, string[]> = {
-  "bleu-de-chanel":          ["Casual Everyday", "Office Safe", "Signature Scent"],
-  "ganymede":                ["Date Night", "Office Safe", "Signature Scent"],
-  "baccarat-rouge-540-extrait": ["Date Night", "Gala Formal"],
-  "aventus":                 ["Casual Everyday", "Office Safe", "Signature Scent"],
+const OCCASIONS_BY_ID: Record<string, OccasionEnum[]> = {
+  "bleu-de-chanel":             [OccasionEnum.CasualEveryday, OccasionEnum.OfficeSafe, OccasionEnum.SignatureScent],
+  "ganymede":                   [OccasionEnum.DateNight, OccasionEnum.OfficeSafe, OccasionEnum.SignatureScent],
+  "baccarat-rouge-540-extrait": [OccasionEnum.DateNight, OccasionEnum.GalaFormal],
+  "aventus":                    [OccasionEnum.CasualEveryday, OccasionEnum.OfficeSafe, OccasionEnum.SignatureScent],
 };
 
 // ── Concurrency guard ────────────────────────────────────────────────────────
-// During `next build`, Next.js spawns up to 13 parallel worker processes that
-// all call runSyncEngine() concurrently. Because globalThis is per-process,
-// the simple boolean flag cannot coordinate between workers, causing P2034
-// deadlocks on the perfumeNote.deleteMany() step.
-//
-// Solution: use MySQL's advisory GET_LOCK() so only ONE worker runs the full
-// sync at a time. Other workers acquire the lock immediately after the first
-// releases it, see the "already executed" sentinel row, and bail out early.
-//
-// The sentinel is a dedicated row in the OlfactoryProfile table with a
-// well-known sentinel ID that cannot clash with a real perfume slug.
 declare global {
   var __syncEngineExecuted: boolean | undefined;
 }
 
 const ADVISORY_LOCK_NAME = "uca_sync_engine";
-const ADVISORY_LOCK_TIMEOUT_SEC = 30; // wait up to 30 s for the lock
+const ADVISORY_LOCK_TIMEOUT_SEC = 30;
 
 async function acquireAdvisoryLock(): Promise<boolean> {
   const result = await prisma.$queryRawUnsafe<[{ acquired: number }]>(
@@ -124,29 +92,21 @@ export async function runSyncEngine() {
   console.log("=== SYNC ENGINE ACTIVATED ===");
   console.log("Static file perfumes count:", perfumes.length);
 
-  // Fast path: same Node.js process already ran the sync (hot-reload guard).
   if (globalThis.__syncEngineExecuted) {
     console.log("Sync engine already marked executed on global scope.");
     return;
   }
 
-  // Slow path: acquire a MySQL advisory lock so parallel build workers don't
-  // race each other on the write-heavy note deletion / recreation steps.
   const locked = await acquireAdvisoryLock();
   if (!locked) {
-    // Another worker holds the lock and the timeout elapsed — bail out safely.
     console.log("⏳ Sync engine: could not acquire advisory lock; skipping duplicate sync.");
     return;
   }
 
-  // We hold the lock. Mark the in-process flag so any re-entrant calls within
-  // this same process (e.g. HMR) skip the full sync.
   globalThis.__syncEngineExecuted = true;
-
   console.log("🔄 Starting autonomous data synchronization...");
 
   try {
-    // 1. Prune legacy records from the database
     const validIds = perfumes.map((p) => p.id);
     const deleteResult = await prisma.perfume.deleteMany({
       where: { id: { notIn: validIds } },
@@ -155,63 +115,85 @@ export async function runSyncEngine() {
       console.log(`🧹 Pruned ${deleteResult.count} stale perfume(s) from the database.`);
     }
 
-    // 2. Upsert valid records
     for (const source of perfumes) {
-      const concentration = toConcentrationEnum(source.concentration);
-      const gender = toGenderEnum(source.gender);
       const descriptionEn = source.mainDescriptionEn ?? EN_DESCRIPTIONS[source.id] ?? source.mainDescription;
-      const seasons = (source.seasons ?? SEASONS_BY_ID[source.id] ?? ["All Seasons"]).join(", ");
-      const occasions = (source.occasions ?? OCCASIONS_BY_ID[source.id] ?? ["Casual Everyday"]).join(", ");
 
-      // Upsert Perfume row
+      // Upsert Perfume scalar row
       await prisma.perfume.upsert({
         where: { id: source.id },
         update: {
           name: source.name,
           brand: source.brand,
-          concentration,
-          gender,
+          concentration: source.concentration,
+          gender: source.gender,
           mainDescriptionTr: source.mainDescription,
           mainDescriptionEn: descriptionEn,
-          seasons,
-          occasions,
         },
         create: {
           id: source.id,
           name: source.name,
           brand: source.brand,
-          concentration,
-          gender,
+          concentration: source.concentration,
+          gender: source.gender,
           mainDescriptionTr: source.mainDescription,
           mainDescriptionEn: descriptionEn,
-          seasons,
-          occasions,
         },
       });
 
-      // Delete-then-recreate notes for this perfume (idempotent, lock-protected)
+      // Seasons
+      await prisma.perfumeSeason.deleteMany({ where: { perfumeId: source.id } });
+      const seasons = SEASONS_BY_ID[source.id] ?? [SeasonEnum.AllSeasons];
+      await prisma.perfumeSeason.createMany({
+        data: seasons.map((season) => ({ perfumeId: source.id, season })),
+        skipDuplicates: true,
+      });
+
+      // Occasions
+      await prisma.perfumeOccasion.deleteMany({ where: { perfumeId: source.id } });
+      const occasions = OCCASIONS_BY_ID[source.id] ?? [OccasionEnum.CasualEveryday];
+      await prisma.perfumeOccasion.createMany({
+        data: occasions.map((occasion) => ({ perfumeId: source.id, occasion })),
+        skipDuplicates: true,
+      });
+
+      // Notes
       await prisma.perfumeNote.deleteMany({ where: { perfumeId: source.id } });
 
-      const noteLayers: { layer: NoteLayer; names: string[]; namesEn?: string[] }[] = [
-        { layer: NoteLayer.bas,  names: source.notes.bas,  namesEn: source.notesEn?.bas  },
-        { layer: NoteLayer.kalp, names: source.notes.kalp, namesEn: source.notesEn?.kalp },
-        { layer: NoteLayer.dip,  names: source.notes.dip,  namesEn: source.notesEn?.dip  },
+      const noteLayers: { layer: NoteLayer; names: string[] }[] = [
+        { layer: NoteLayer.TOP,   names: source.notes.bas },
+        { layer: NoteLayer.HEART, names: source.notes.kalp },
+        { layer: NoteLayer.BASE,  names: source.notes.dip },
       ];
 
-      for (const { layer, names, namesEn } of noteLayers) {
-        await prisma.perfumeNote.createMany({
-          data: names.map((noteNameTr, index) => {
-            let noteNameEn = namesEn?.[index] ?? NOTE_TR_TO_EN[noteNameTr];
-            if (!noteNameEn) {
-              console.warn(`⚠️  Translation missing for note "${noteNameTr}". Using Turkish string.`);
-              noteNameEn = noteNameTr;
-            }
-            return { perfumeId: source.id, noteNameTr, noteNameEn, layer };
-          }),
-        });
+      for (const { layer, names } of noteLayers) {
+        for (const noteNameTr of names) {
+          const noteNameEn = NOTE_TR_TO_EN[noteNameTr] ?? noteNameTr;
+
+          const note = await prisma.note.upsert({
+            where: { nameTr: noteNameTr },
+            update: { nameEn: noteNameEn },
+            create: { nameTr: noteNameTr, nameEn: noteNameEn },
+          });
+
+          await prisma.perfumeNote.upsert({
+            where: {
+              perfumeId_noteId_layer: {
+                perfumeId: source.id,
+                noteId: note.id,
+                layer,
+              },
+            },
+            update: {},
+            create: {
+              perfumeId: source.id,
+              noteId: note.id,
+              layer,
+            },
+          });
+        }
       }
 
-      // Upsert the five-axis olfactory profile (the data the radar chart reads)
+      // Olfactory Profile
       await prisma.olfactoryProfile.upsert({
         where: { perfumeId: source.id },
         update: {
@@ -238,7 +220,6 @@ export async function runSyncEngine() {
   } catch (error) {
     console.error("❌ Synchronization failed:", error);
   } finally {
-    // Always release the advisory lock, even if the sync threw an error.
     await releaseAdvisoryLock();
   }
 }

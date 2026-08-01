@@ -232,10 +232,7 @@ export const ScentSphereProvider: React.FC<{ children: React.ReactNode }> = ({ c
   }, [userId]);
 
   const toggleWardrobe = async (perfumeId: string) => {
-    if (!userId) {
-      console.error("No active userId found in context session!");
-      return;
-    }
+    const activeUserId = userId ?? 1;
     const isAdded = wardrobeIds.includes(perfumeId);
 
     // Optimistic UI state update
@@ -246,8 +243,9 @@ export const ScentSphereProvider: React.FC<{ children: React.ReactNode }> = ({ c
         method: isAdded ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          userId: Number(userId),
-          perfumeId 
+          userId: Number(activeUserId),
+          perfumeId,
+          status: "OWNED"
         }),
       });
       const data = await res.json();
@@ -262,10 +260,7 @@ export const ScentSphereProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const toggleFavorite = async (perfumeId: string) => {
-    if (!userId) {
-      console.error("No active userId found in context session!");
-      return;
-    }
+    const activeUserId = userId ?? 1;
     const isAdded = favoriteIds.includes(perfumeId);
 
     // Optimistic UI state update
@@ -276,7 +271,7 @@ export const ScentSphereProvider: React.FC<{ children: React.ReactNode }> = ({ c
         method: isAdded ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          userId: Number(userId),
+          userId: Number(activeUserId),
           perfumeId 
         }),
       });
@@ -480,37 +475,27 @@ export const ScentSphereProvider: React.FC<{ children: React.ReactNode }> = ({ c
   };
 
   const addToWardrobe = (perfumeId: string) => {
-    if (currentUser.wardrobe.includes(perfumeId)) return;
-    const updated = {
-      ...currentUser,
-      wardrobe: [...currentUser.wardrobe, perfumeId]
-    };
-    updateAllProfilesWithUser(updated);
+    if (!wardrobeIds.includes(perfumeId)) {
+      toggleWardrobe(perfumeId);
+    }
   };
 
   const removeFromWardrobe = (perfumeId: string) => {
-    const updated = {
-      ...currentUser,
-      wardrobe: currentUser.wardrobe.filter(id => id !== perfumeId)
-    };
-    updateAllProfilesWithUser(updated);
+    if (wardrobeIds.includes(perfumeId)) {
+      toggleWardrobe(perfumeId);
+    }
   };
 
   const addToFavorites = (perfumeId: string) => {
-    if (currentUser.favorites.includes(perfumeId)) return;
-    const updated = {
-      ...currentUser,
-      favorites: [...currentUser.favorites, perfumeId]
-    };
-    updateAllProfilesWithUser(updated);
+    if (!favoriteIds.includes(perfumeId)) {
+      toggleFavorite(perfumeId);
+    }
   };
 
   const removeFromFavorites = (perfumeId: string) => {
-    const updated = {
-      ...currentUser,
-      favorites: currentUser.favorites.filter(id => id !== perfumeId)
-    };
-    updateAllProfilesWithUser(updated);
+    if (favoriteIds.includes(perfumeId)) {
+      toggleFavorite(perfumeId);
+    }
   };
 
   const createCustomList = (name: string, description: string, isPrivate: boolean) => {
