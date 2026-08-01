@@ -155,7 +155,7 @@ async function main(): Promise<void> {
   // 1. Parfümler ve Notalar
   for (const source of perfumes) {
     const descriptionEn =
-      EN_DESCRIPTIONS[source.id] ?? source.mainDescription;
+      EN_DESCRIPTIONS[source.id] ?? source.mainDescriptionEn ?? source.mainDescription;
 
     // Perfume Kaydı
     await prisma.perfume.upsert({
