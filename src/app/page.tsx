@@ -959,28 +959,28 @@ export default function Home() {
                     <div className="flex justify-between text-[10px] font-light">
                       <span className="text-[#f5f0e6]/40 uppercase tracking-wider">{language === "tr" ? "Üst:" : "Top:"}</span>
                       <span className="text-[#f5f0e6]/80 text-right line-clamp-1 truncate max-w-[150px]">
-                        {(language === "tr"
-                          ? ((perfume.notes as any).top_tr ?? perfume.notes.top)
-                          : perfume.notes.top
-                        ).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
+                        {((language === "tr"
+                          ? ((perfume.notes as any).top_tr ?? (perfume.notes as any).top)
+                          : ((perfume.notes as any).top_en ?? (perfume.notes as any).top)
+                        ) as string[]).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
                       </span>
                     </div>
                     <div className="flex justify-between text-[10px] font-light">
                       <span className="text-[#f5f0e6]/40 uppercase tracking-wider">{language === "tr" ? "Kalp:" : "Heart:"}</span>
                       <span className="text-[#f5f0e6]/80 text-right line-clamp-1 truncate max-w-[150px]">
-                        {(language === "tr"
-                          ? ((perfume.notes as any).mid_tr ?? perfume.notes.mid)
-                          : perfume.notes.mid
-                        ).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
+                        {((language === "tr"
+                          ? ((perfume.notes as any).mid_tr ?? (perfume.notes as any).mid)
+                          : ((perfume.notes as any).mid_en ?? (perfume.notes as any).mid)
+                        ) as string[]).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
                       </span>
                     </div>
                     <div className="flex justify-between text-[10px] font-light">
                       <span className="text-[#f5f0e6]/40 uppercase tracking-wider">{language === "tr" ? "Dip:" : "Base:"}</span>
                       <span className="text-[#f5f0e6]/80 text-right line-clamp-1 truncate max-w-[150px]">
-                        {(language === "tr"
-                          ? ((perfume.notes as any).base_tr ?? perfume.notes.base)
-                          : perfume.notes.base
-                        ).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
+                        {((language === "tr"
+                          ? ((perfume.notes as any).base_tr ?? (perfume.notes as any).base)
+                          : ((perfume.notes as any).base_en ?? (perfume.notes as any).base)
+                        ) as string[]).map((n: string) => localizeNote(n, language === "tr")).join(", ")}
                       </span>
                     </div>
                   </div>

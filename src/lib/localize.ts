@@ -160,6 +160,7 @@ export const NOTE_MAP: Record<string, { tr: string; en: string }> = {
   "Süet Deri":         { tr: "Süet Deri", en: "Suede Leather" },
   "Mineral Akorlar":   { tr: "Mineral Akorlar", en: "Mineral Accords" },
   "Kehribar Ağacı":    { tr: "Kehribar Ağacı", en: "Amberwood" },
+  "Amber Ağacı":       { tr: "Amber Ağacı", en: "Amberwood" },
   "Gri Kehribar":      { tr: "Gri Kehribar", en: "Ambergris" },
   "Kehribar":          { tr: "Kehribar", en: "Amber" },
   "Çam Reçinesi":      { tr: "Çam Reçinesi", en: "Pine Resin" },
@@ -172,6 +173,39 @@ export const NOTE_MAP: Record<string, { tr: string; en: string }> = {
   Misk:                { tr: "Misk", en: "Musk" },
   "Meşe Yosunu":       { tr: "Meşe Yosunu", en: "Oakmoss" },
   Vanilya:             { tr: "Vanilya", en: "Vanilla" },
+  // Miss Dior Blooming Bouquet
+  "Sicilya Mandalinası": { tr: "Sicilya Mandalinası", en: "Sicilian Mandarin" },
+  "Pembe Şakayık":     { tr: "Pembe Şakayık", en: "Pink Peony" },
+  "Şam Gülü":          { tr: "Şam Gülü", en: "Damascus Rose" },
+  Kayısı:              { tr: "Kayısı", en: "Apricot" },
+  Şeftali:             { tr: "Şeftali", en: "Peach" },
+  "Beyaz Misk":        { tr: "Beyaz Misk", en: "White Musk" },
+  // Gucci Flora
+  "Armut Çiçeği":      { tr: "Armut Çiçeği", en: "Pear Blossom" },
+  "Kırmızı Meyveler":  { tr: "Kırmızı Meyveler", en: "Red Berries" },
+  "İtalyan Mandalinası": { tr: "İtalyan Mandalinası", en: "Italian Mandarin" },
+  "Beyaz Gardenya":    { tr: "Beyaz Gardenya", en: "White Gardenia" },
+  Frangipani:          { tr: "Frangipani", en: "Frangipani" },
+  "Esmer Şeker":       { tr: "Esmer Şeker", en: "Brown Sugar" },
+  // Black XS
+  Adaçayı:             { tr: "Adaçayı", en: "Sage" },
+  "Kadife Çiçeği":     { tr: "Kadife Çiçeği", en: "Tagetes" },
+  Pralin:              { tr: "Pralin", en: "Praline" },
+  Tarçın:              { tr: "Tarçın", en: "Cinnamon" },
+  "Tolu Balsamı":      { tr: "Tolu Balsamı", en: "Tolu Balsam" },
+  "Siyah Kakule":      { tr: "Siyah Kakule", en: "Black Cardamom" },
+  "Brezilya Gül Ağacı": { tr: "Brezilya Gül Ağacı", en: "Brazilian Rosewood" },
+  "Siyah Kehribar":    { tr: "Siyah Kehribar", en: "Black Amber" },
+  // Shalimar
+  İris:                { tr: "İris", en: "Iris" },
+  "Tonka Fasulyesi":   { tr: "Tonka Fasulyesi", en: "Tonka Bean" },
+  // Black Opium
+  "Portakal Çiçeği":   { tr: "Portakal Çiçeği", en: "Orange Blossom" },
+  Armut:               { tr: "Armut", en: "Pear" },
+  Kahve:               { tr: "Kahve", en: "Coffee" },
+  "Acı Badem":         { tr: "Acı Badem", en: "Bitter Almond" },
+  "Meyan Kökü":        { tr: "Meyan Kökü", en: "Licorice" },
+  "Kaşmir Ağacı":      { tr: "Kaşmir Ağacı", en: "Cashmere Wood" },
 };
 
 export function localizeSillage(val: string | undefined | null, isTr: boolean): string {

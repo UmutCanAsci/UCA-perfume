@@ -76,6 +76,39 @@ const NOTE_TR_TO_EN: Record<string, string> = {
   Misk: "Musk",
   "Meşe Yosunu": "Oakmoss",
   Vanilya: "Vanilla",
+  // Miss Dior Blooming Bouquet
+  "Sicilya Mandalinası": "Sicilian Mandarin",
+  "Pembe Şakayık": "Pink Peony",
+  "Şam Gülü": "Damascus Rose",
+  Kayısı: "Apricot",
+  Şeftali: "Peach",
+  "Beyaz Misk": "White Musk",
+  // Gucci Flora
+  "Armut Çiçeği": "Pear Blossom",
+  "Kırmızı Meyveler": "Red Berries",
+  "İtalyan Mandalinası": "Italian Mandarin",
+  "Beyaz Gardenya": "White Gardenia",
+  Frangipani: "Frangipani",
+  "Esmer Şeker": "Brown Sugar",
+  // Black XS
+  Adaçayı: "Sage",
+  "Kadife Çiçeği": "Tagetes",
+  Pralin: "Praline",
+  Tarçın: "Cinnamon",
+  "Tolu Balsamı": "Tolu Balsam",
+  "Siyah Kakule": "Black Cardamom",
+  "Brezilya Gül Ağacı": "Brazilian Rosewood",
+  "Siyah Kehribar": "Black Amber",
+  // Shalimar
+  İris: "Iris",
+  "Tonka Fasulyesi": "Tonka Bean",
+  // Black Opium
+  "Portakal Çiçeği": "Orange Blossom",
+  Armut: "Pear",
+  Kahve: "Coffee",
+  "Acı Badem": "Bitter Almond",
+  "Meyan Kökü": "Licorice",
+  "Kaşmir Ağacı": "Cashmere Wood",
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -218,15 +251,35 @@ async function main(): Promise<void> {
       where: { perfumeId: source.id },
     });
 
-    const noteLayers: { layer: NoteLayer; names: string[] }[] = [
-      { layer: NoteLayer.TOP, names: source.notes.bas },
-      { layer: NoteLayer.HEART, names: source.notes.kalp },
-      { layer: NoteLayer.BASE, names: source.notes.dip },
+    // Build a TR→EN mapping from notesEn if available, falling back to the dictionary
+    const notesEnByLayer: Record<string, Record<string, string>> = {};
+    if (source.notesEn) {
+      const layerKeys: Array<[string, string[]]> = [
+        ["bas",  source.notesEn.bas],
+        ["kalp", source.notesEn.kalp],
+        ["dip",  source.notesEn.dip],
+      ];
+      for (const [key, enNames] of layerKeys) {
+        notesEnByLayer[key] = {};
+        const trNames = source.notes[key as keyof typeof source.notes];
+        trNames.forEach((tr, i) => {
+          notesEnByLayer[key][tr] = enNames[i] ?? tr;
+        });
+      }
+    }
+
+    const noteLayers: { layer: NoteLayer; names: string[]; layerKey: string }[] = [
+      { layer: NoteLayer.TOP,   names: source.notes.bas,  layerKey: "bas"  },
+      { layer: NoteLayer.HEART, names: source.notes.kalp, layerKey: "kalp" },
+      { layer: NoteLayer.BASE,  names: source.notes.dip,  layerKey: "dip"  },
     ];
 
-    for (const { layer, names } of noteLayers) {
+    for (const { layer, names, layerKey } of noteLayers) {
       for (const noteNameTr of names) {
-        const noteNameEn = NOTE_TR_TO_EN[noteNameTr] ?? noteNameTr;
+        const noteNameEn =
+          notesEnByLayer[layerKey]?.[noteNameTr] ??
+          NOTE_TR_TO_EN[noteNameTr] ??
+          noteNameTr;
 
         // Master Note Upsert
         const note = await prisma.note.upsert({
